@@ -47,7 +47,8 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
     modImplementation "curse.maven:xaeros-world-map-317780:${project.xaero_world_map_version}"
     modImplementation "curse.maven:xaeros-minimap-263420:${project.xaero_minimap_version}"
-
+    modImplementation "curse.maven:ommc-454900:${project.ommc_version}"
+    modImplementation "curse.maven:malilib-303119:${project.malilib_version}"
 }
 
 processResources {

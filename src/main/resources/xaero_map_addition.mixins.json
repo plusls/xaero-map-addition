@@ -4,7 +4,10 @@
   "package": "com.plusls.xma.mixin",
   "compatibilityLevel": "JAVA_16",
   "client": [
-    "MixinGuiMap"
+    "MixinGuiMap",
+    "MixinSupportXaeroMinimap",
+    "MixinWaypoint",
+    "MixinWaypointsGuiRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
