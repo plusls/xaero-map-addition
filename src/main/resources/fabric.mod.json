@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "xaero_map_addition",
   "version": "${version}",
-
   "name": "Xaero Map Addition",
   "description": "Xaero Map Addition",
   "authors": [
@@ -12,11 +11,9 @@
     "homepage": "https://blog.plusls.com/",
     "sources": "https://github.com/plusls/xaero-map-addition"
   },
-
   "license": "MPL-2.0",
   "icon": "assets/xaero_map_addition/icon.png",
-
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "client": [
       "com.plusls.xma.XaeroMapAddition"
@@ -25,7 +22,6 @@
   "mixins": [
     "xaero_map_addition.mixins.json"
   ],
-
   "depends": {
     "fabricloader": ">=0.11.3",
     "minecraft": "1.17.x",
