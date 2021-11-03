@@ -1,9 +1,18 @@
-# Fabric Example Mod
+# Xaero Map Addition
 
-## Setup
+## Deps
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
++ Oh My Minecraft Client
++ Xaero World Map
++ Xaero Mini Map
 
-## License
+## Features
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+
+### Chinese Translation
+
+Add Chinese translation from https://www.bilibili.com/read/cv11613668
+
+### Support highlight waypoint
+
+Support highlight waypoint in world map, and can render highlight waypoint in minimap.
