@@ -30,7 +30,7 @@ public class RenderWaypointUtil {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 
         Sprite icon = HighlightWaypointResourceLoader.targetIdSprite;
-        Matrix4f matrix4f = matrixStack.peek().getModel();
+        Matrix4f matrix4f = matrixStack.peek().getPositionMatrix();
 
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
         bufferBuilder.vertex(matrix4f, -xWidth, -yWidth, 0.0f).texture(icon.getMinU(), icon.getMinV()).color(iconR, iconG, iconB, fade).next();
