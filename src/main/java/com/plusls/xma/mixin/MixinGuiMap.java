@@ -39,7 +39,7 @@ public abstract class MixinGuiMap extends ScreenBase implements IRightClickableE
         final int playerY;
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player != null) {
-            playerY = player.getBlockY();
+            playerY = player.getBlockPos().getY();
         } else {
             playerY = 32767;
         }
