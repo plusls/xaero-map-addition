@@ -4,7 +4,10 @@ plugins {
     id('org.ajoberstar.grgit').version('4.1.0')
 }
 
-if (project.java_version == "16") {
+if (project.java_version == "17") {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+} else if (project.java_version == "16") {
     sourceCompatibility = JavaVersion.VERSION_16
     targetCompatibility = JavaVersion.VERSION_16
 } else if (project.java_version == "8") {
@@ -45,10 +48,10 @@ dependencies {
     mappings("net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2")
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
-    modImplementation "curse.maven:xaeros-world-map-317780:${project.xaero_world_map_version}"
-    modImplementation "curse.maven:xaeros-minimap-263420:${project.xaero_minimap_version}"
-    modImplementation "curse.maven:ommc-454900:${project.ommc_version}"
-    modImplementation "curse.maven:malilib-303119:${project.malilib_version}"
+    modImplementation("curse.maven:xaeros-world-map-317780:${project.xaero_world_map_version}")
+    modImplementation("curse.maven:xaeros-minimap-263420:${project.xaero_minimap_version}")
+    modImplementation("curse.maven:ommc-454900:${project.ommc_version}")
+    modImplementation("curse.maven:malilib-303119:${project.malilib_version}")
 }
 
 processResources {
@@ -60,7 +63,9 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
-    if (project.java_version == "16") {
+    if (project.java_version == "17") {
+        it.options.release.set(17)
+    } else if (project.java_version == "16") {
         it.options.release.set(16)
     } else if (project.java_version == "8") {
         it.options.release.set(8)
