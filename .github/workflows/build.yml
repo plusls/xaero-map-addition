@@ -30,9 +30,9 @@ jobs:
       - name: Set build version
         if: ${{ runner.os != 'Windows' }}
         run: |
-          sed -i "s/pre_release = alpha/pre_release = beta/g" gradle.properties
+          sed -i "s/pre_release=alpha/pre_release=beta/g" gradle.properties
       - name: capture build artifacts
-        if: ${{ runner.os == 'Linux'}}
+        if: ${{ runner.os == 'Linux' && matrix.java == '17' }}
         uses: actions/upload-artifact@v2
         with:
           name: Artifacts
