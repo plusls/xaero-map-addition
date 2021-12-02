@@ -4,18 +4,14 @@
 # against bad commits.
 
 name: build
-on: [pull_request, push]
+on: [ pull_request, push ]
 
 jobs:
   build:
     strategy:
       matrix:
-        # Use these Java versions
-        java: [
-          16    # Minimum supported by Minecraft
-        ]
-        # and run on both Linux and Windows
-        os: [ubuntu-20.04, windows-latest]
+        java: [ 17 ]
+        os: [ ubuntu-20.04 ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: checkout repository
@@ -31,8 +27,12 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
+      - name: Set build version
+        if: ${{ runner.os != 'Windows' }}
+        run: |
+          sed -i "s/pre_release = alpha/pre_release = beta/g" gradle.properties
       - name: capture build artifacts
-        if: ${{ runner.os == 'Linux' && matrix.java == '16' }} # Only upload artifacts built from latest java on one OS
+        if: ${{ runner.os == 'Linux'}}
         uses: actions/upload-artifact@v2
         with:
           name: Artifacts
