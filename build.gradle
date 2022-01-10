@@ -1,57 +1,45 @@
 plugins {
-    id('fabric-loom').version('0.10-SNAPSHOT')
-    id('maven-publish')
-    id('org.ajoberstar.grgit').version('4.1.0')
+    id("fabric-loom").version("0.10-SNAPSHOT")
+    id("maven-publish")
+    id("org.ajoberstar.grgit").version("4.1.0")
+    id("com.modrinth.minotaur").version("1.2.1")
 }
 
-if (project.java_version == "17") {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-} else if (project.java_version == "16") {
-    sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_16
-} else if (project.java_version == "8") {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-} else {
-    throw new GradleException("wrong java_version")
-}
-
+setSourceCompatibility(JavaVersion.toVersion(project.java_version))
+setTargetCompatibility(JavaVersion.toVersion(project.java_version))
 String real_version = "${project.mod_version}"
 
-
-String getGitMetadata() {
-    String ret = grgit.head().abbreviatedId
-    if (!grgit.status().clean) {
-        ret = new Date().format('yyyyMMdd.HHmmss') + ".dirty." + ret
-    }
-    return ret
-}
-
 if (project.pre_release != "") {
-    real_version += "-${project.pre_release}+" + getGitMetadata()
+    real_version += "-${project.pre_release}+"
+    if (project.pre_release == "alpha" && !grgit.status().clean) {
+        real_version += new Date().format("yyyyMMdd.HHmmss") + ".dirty." + grgit.head().abbreviatedId
+    } else {
+        real_version += grgit.head().abbreviatedId
+    }
 }
 
-version = "${project.minecraft_version}-${real_version}" as Object
-
-group = project.maven_group
+setArchivesBaseName("${project.archives_base_name}-${project.minecraft_version}")
+setVersion(real_version)
+setGroup(project.maven_group)
 
 repositories {
     maven {
         url = "https://www.cursemaven.com"
     }
+    mavenCentral()
 }
 
 
 dependencies {
     minecraft("com.mojang:minecraft:${project.minecraft_version}")
     mappings("net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2")
+    // fuck xaero
+    //mappings("net.fabricmc:yarn:1.18-pre5+build.10:v2")
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
     modImplementation("curse.maven:xaeros-world-map-317780:${project.xaero_world_map_version}")
     modImplementation("curse.maven:xaeros-minimap-263420:${project.xaero_minimap_version}")
     modImplementation("curse.maven:ommc-454900:${project.ommc_version}")
-    modImplementation("curse.maven:malilib-303119:${project.malilib_version}")
 }
 
 processResources {
@@ -63,15 +51,7 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
-    if (project.java_version == "17") {
-        it.options.release.set(17)
-    } else if (project.java_version == "16") {
-        it.options.release.set(16)
-    } else if (project.java_version == "8") {
-        it.options.release.set(8)
-    } else {
-        throw new GradleException("wrong java_version")
-    }
+    it.options.release.set(Integer.parseInt(project.java_version as String))
 }
 
 java {
@@ -87,25 +67,18 @@ jar {
     }
 }
 
-// configure the maven publication
-//publishing {
-//    publications {
-//        mavenJava(MavenPublication) {
-//            // add all the jars that should be included when publishing to maven
-//            artifact(remapJar) {
-//                builtBy remapJar
-//            }
-//            artifact(sourcesJar) {
-//                builtBy remapSourcesJar
-//            }
-//        }
-//    }
-//
-//    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-//    repositories {
-//        // Add repositories to publish to here.
-//        // Notice: This block does NOT have the same function as the block in the top level.
-//        // The repositories here will be used for publishing your artifact, not for
-//        // retrieving dependencies.
-//    }
-//}
+import com.modrinth.minotaur.TaskModrinthUpload
+
+task publishModrinth(type: TaskModrinthUpload) {
+    onlyIf {
+        System.getenv("MODRINTH") // Only attempt to run this task if the MODRINTH variable is set, otherwise SKIP it
+    }
+    token = System.getenv("MODRINTH")
+    changelog = System.getenv("CHANGELOG")
+    projectId = "CTIW5eos"
+    versionNumber = version
+    // On fabric, use "remapJar" instead of "jar"
+    uploadFile = remapJar
+    addGameVersion(project.minecraft_version as String)
+    addLoader("fabric")
+}
