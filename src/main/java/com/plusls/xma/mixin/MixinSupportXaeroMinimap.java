@@ -11,18 +11,20 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xaero.map.WorldMap;
 import xaero.map.graphics.renderer.multitexture.MultiTextureRenderTypeRendererProvider;
+import xaero.map.gui.GuiMap;
 import xaero.map.mods.SupportXaeroMinimap;
 import xaero.map.mods.gui.Waypoint;
 
 @Mixin(value = SupportXaeroMinimap.class, remap = false)
 public class MixinSupportXaeroMinimap {
     @Inject(method = "renderWaypoints", at = @At("RETURN"))
-    private void drawHighlightWaypoint(MatrixStack matrixStack, VertexConsumerProvider.Immediate renderTypeBuffers,
+    private void drawHighlightWaypoint(GuiMap mapScreen, MatrixStack matrixStack,
+                                       VertexConsumerProvider.Immediate renderTypeBuffers,
                                        MultiTextureRenderTypeRendererProvider rendererProvider,
                                        double cameraX, double cameraZ, int width, int height,
-                                       double guiBasedScale, double scale,
-                                       double mouseX, double mouseZ, float brightness,
-                                       Waypoint oldViewed, MinecraftClient mc, CallbackInfoReturnable<Waypoint> cir) {
+                                       double guiBasedScale, double scale, double mouseX, double mouseZ,
+                                       float brightness, Waypoint oldViewed, MinecraftClient mc,
+                                       CallbackInfoReturnable<Waypoint> cir) {
         if (HighlightWaypointUtil.highlightPos == null) {
             return;
         }
