@@ -33,8 +33,6 @@ repositories {
 dependencies {
     minecraft("com.mojang:minecraft:${project.minecraft_version}")
     mappings("net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2")
-    // fuck xaero
-    //mappings("net.fabricmc:yarn:1.18-pre5+build.10:v2")
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
     modImplementation("curse.maven:xaeros-world-map-317780:${project.xaero_world_map_version}")
