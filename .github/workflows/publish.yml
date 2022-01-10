@@ -22,8 +22,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
-      - name: Set build version
-        if: ${{ runner.os != 'Windows' }}
+      - name: Set pre_release
         run: |
           sed -i "s/pre_release=alpha/pre_release=/g" gradle.properties
       - name: make gradle wrapper executable
@@ -33,6 +32,7 @@ jobs:
         run: ./gradlew build
       - name: Find correct JAR
         id: findjar
+        if: ${{ runner.os == 'Linux' && matrix.java == '17' }}
         run: |
           output="$(find build/libs/ ! -name "*-dev.jar" ! -name "*-sources.jar" -type f -printf "%f\n")"
           echo "::set-output name=jarname::$output"
@@ -42,3 +42,23 @@ jobs:
         with:
           files: build/libs/${{ steps.findjar.outputs.jarname }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload to Curseforge
+        uses: itsmeow/curseforge-upload@v3
+        if: ${{ runner.os == 'Linux' && matrix.java == '17' }}
+        with:
+          token: ${{ secrets.CF_API_TOKEN }}
+          project_id: 566242
+          game_endpoint: minecraft
+          file_path: build/libs/${{ steps.findjar.outputs.jarname }}
+          changelog_type: markdown
+          changelog: ${{ github.event.release.body }}
+          # 1.16.5:8203, 1.17:8516, 1.18:8830, fabric:7499
+          game_versions: ${{ fromJson('{"1.15.x":"7722","1.16.x":"8203","1.17.x":"8516","1.18.x":"8830"}')[matrix.branch] }}, 7499
+          release_type: release
+      - name: Upload to Modrinth
+        if: ${{ runner.os == 'Linux' && matrix.java == '17' }}
+        run: |
+          ./gradlew publishModrinth
+        env:
+          MODRINTH: ${{ secrets.MODRINTH }}
+          CHANGELOG: ${{ github.event.release.body }}
