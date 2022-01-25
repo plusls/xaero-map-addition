@@ -44,7 +44,7 @@ public abstract class MixinGuiMap extends ScreenBase implements IRightClickableE
             playerY = 32767;
         }
         ArrayList<RightClickOption> options = cir.getReturnValue();
-        options.add(new RightClickOption("gui.xaero_right_click_map_highlight_location", options.size(), this) {
+        options.add(new RightClickOption("xma.gui.xaero_right_click_map_highlight_location", options.size(), this) {
             public void onAction(Screen screen) {
                 if (SupportMods.minimap()) {
                     if (WorldMap.settings.waypoints) {

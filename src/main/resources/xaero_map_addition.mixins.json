@@ -5,9 +5,12 @@
   "compatibilityLevel": "JAVA_8",
   "client": [
     "MixinGuiMap",
+    "MixinGuiWaypoints",
+    "MixinGuiWaypoints_List",
     "MixinSupportXaeroMinimap",
     "MixinWaypoint",
-    "MixinWaypointsGuiRenderer"
+    "MixinWaypointsGuiRenderer",
+    "MixinWaypointSharingHandler"
   ],
   "injectors": {
     "defaultRequire": 1
