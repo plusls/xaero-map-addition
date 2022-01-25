@@ -9,7 +9,8 @@
     "MixinGuiWaypoints_List",
     "MixinSupportXaeroMinimap",
     "MixinWaypoint",
-    "MixinWaypointsGuiRenderer"
+    "MixinWaypointsGuiRenderer",
+    "MixinWaypointSharingHandler"
   ],
   "injectors": {
     "defaultRequire": 1

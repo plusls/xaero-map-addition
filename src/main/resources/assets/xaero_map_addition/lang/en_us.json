@@ -1,8 +1,10 @@
 {
   "xma.gui.xaero_right_click_map_highlight_location": "Highlight location",
   "xma.gui.xaero_right_click_map_highlight_waypoint": "Highlight waypoint",
+  "xma.gui.button.better_share": "Better Share",
   "xma.gui.button.direct_delete": "Direct Delete",
   "xma.gui.button.highlight_waypoint": "Highlight",
   "xma.gui.message.direct_delete": "Are you sure you want to delete these selected waypoints? These waypoints cannot be recovered after deletion.",
+  "xma.gui.message.xaero_add_waypoint": "§6Xaeros Minimap§r: Click to add waypoint.",
   "xma.gui.title.direct_delete": "Confirm delete waypoint"
 }

@@ -1,8 +1,10 @@
 {
   "xma.gui.xaero_right_click_map_highlight_location": "高亮位置",
   "xma.gui.xaero_right_click_map_highlight_waypoint": "高亮路径点",
+  "xma.gui.button.better_share": "更好的分享",
   "xma.gui.button.direct_delete": "直接删除",
   "xma.gui.button.highlight_waypoint": "高亮",
   "xma.gui.message.direct_delete": "你确定你要删除这些路径点吗？这些路径点在被删除后将无法恢复！",
+  "xma.gui.message.xaero_add_waypoint": "§6Xaeros Minimap§r: 点击添加路径点",
   "xma.gui.title.direct_delete": "确认删除路径点"
 }
