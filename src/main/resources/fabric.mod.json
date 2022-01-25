@@ -24,10 +24,10 @@
   ],
   "depends": {
     "fabricloader": ">=0.11.3",
-    "minecraft": "1.16.x",
+    "minecraft": "1.15.x",
     "java": ">=8",
     "ommc": "*",
-    "xaeroworldmap": ">=1.19.1",
-    "xaerominimap": ">=21.23.1"
+    "xaeroworldmap": ">=1.14.1",
+    "xaerominimap": ">=21.10.0.4"
   }
 }

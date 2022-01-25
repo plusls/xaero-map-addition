@@ -2,7 +2,7 @@ package com.plusls.xma.mixin;
 
 import com.plusls.xma.ModInfo;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
+import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,8 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xaero.common.minimap.waypoints.Waypoint;
 import xaero.common.minimap.waypoints.WaypointSharingHandler;
-import xaero.common.mixin.MixinGameMessageS2CPacketAccessor;
-import xaero.common.settings.ModSettings;
+import xaero.common.mixin.MixinChatMessageS2CPacketAccessor;
 
 @Mixin(value = WaypointSharingHandler.class, remap = false)
 public abstract class MixinWaypointSharingHandler {
@@ -22,7 +21,7 @@ public abstract class MixinWaypointSharingHandler {
     protected abstract String restoreFormatting(String s);
 
     @Inject(method = "onWaypointReceived", at = @At(value = "HEAD"), cancellable = true)
-    private void betterOnWaypointReceived(String text, GameMessageS2CPacket e, CallbackInfo ci) {
+    private void betterOnWaypointReceived(String text, ChatMessageS2CPacket e, CallbackInfo ci) {
         text = text.replaceAll("§.", "");
         boolean newFormat = text.contains("xaero-waypoint:");
         String sharePrefix = newFormat ? "xaero-waypoint:" : "xaero_waypoint:";
@@ -101,13 +100,13 @@ public abstract class MixinWaypointSharingHandler {
 
             String addCommand = addCommandBuilder.toString();
             Text addWaypointText = new LiteralText("[+X]")
-                    .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, addCommand))
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableText("xma.gui.message.xaero_add_waypoint")))
-                            .withColor(TextColor.fromFormatting(Formatting.GOLD)));
+                    .setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, addCommand))
+                            .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableText("xma.gui.message.xaero_add_waypoint")))
+                            .setColor(Formatting.GOLD));
 
             LiteralText sendText = new LiteralText("<" + playerName + "> ");
             try {
-                sendText.append(new LiteralText(waypointName).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(ModSettings.COLORS[Integer.parseInt(args[6])]))));
+                sendText.append(new LiteralText(waypointName));
                 sendText.append(" @ ").append(dimensionText).append(" ");
                 LiteralText posText = new LiteralText(String.format("[%d, %d, %d]", Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5])));
                 ModInfo.LOGGER.warn("dimId: {}", dimId);
@@ -129,7 +128,7 @@ public abstract class MixinWaypointSharingHandler {
             } catch (NumberFormatException ignored) {
                 return;
             }
-            ((MixinGameMessageS2CPacketAccessor) e).setMessage(sendText);
+            ((MixinChatMessageS2CPacketAccessor) e).setMessage(sendText);
             ci.cancel();
         }
 

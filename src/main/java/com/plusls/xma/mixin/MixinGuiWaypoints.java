@@ -5,6 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
@@ -50,8 +51,9 @@ public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownC
 
     @Inject(method = "init", at = @At(value = "RETURN"), remap = true)
     private void initXMAButtons(CallbackInfo ci) {
-        this.directDeleteButton = new MyTinyButton(this.width / 2 + 212, this.height - 53, new TranslatableText("xma.gui.button.direct_delete"),
-                buttonWidget -> Objects.requireNonNull(this.client).openScreen(new ConfirmScreen(result -> {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        this.directDeleteButton = new MyTinyButton(this.width / 2 + 212, this.height - 53, I18n.translate("xma.gui.button.direct_delete"),
+                buttonWidget -> Objects.requireNonNull(mc).openScreen(new ConfirmScreen(result -> {
                     if (!result) {
                         MinecraftClient.getInstance().openScreen(this);
                         return;
@@ -76,7 +78,7 @@ public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownC
 
         this.addButton(this.directDeleteButton);
         this.highlightButton = new MyTinyButton(this.width / 2 - 286, this.height - 53,
-                new TranslatableText("xma.gui.button.highlight_waypoint"), buttonWidget -> {
+                I18n.translate("xma.gui.button.highlight_waypoint"), buttonWidget -> {
             ArrayList<Waypoint> selectedWaypoints = this.getSelectedWaypointsList();
             if (selectedWaypoints.size() >= 1) {
                 Waypoint w = selectedWaypoints.get(0);

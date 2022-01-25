@@ -23,8 +23,8 @@ public abstract class MixinWaypoint extends WaypointMenuElement implements Compa
 
 
     @Inject(method = "<init>", at = @At(value = "RETURN"))
-    private void addHighlightOption(Object original, int x, int y, int z, String name, String symbol, int color, int type,
-                                    boolean editable, String setName, boolean yIncluded, CallbackInfo ci) {
+    private void addHighlightOption(Object original, int x, int y, int z, String name, String symbol,
+                                    int color, int type, boolean editable, String setName, CallbackInfo ci) {
         rightClickOptions.add(new RightClickOption("xma.gui.xaero_right_click_map_highlight_waypoint", rightClickOptions.size(), this) {
             public void onAction(Screen screen) {
                 HighlightWaypointUtil.highlightPos = new BlockPos(x, y, z);
