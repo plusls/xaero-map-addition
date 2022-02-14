@@ -27,7 +27,7 @@
     "minecraft": "1.18.x",
     "java": ">=17",
     "ommc": "*",
-    "xaeroworldmap": ">=1.19.1",
-    "xaerominimap": ">=21.23.1"
+    "xaeroworldmap": ">=1.20.3.1",
+    "xaerominimap": ">=22.2.0.1"
   }
 }

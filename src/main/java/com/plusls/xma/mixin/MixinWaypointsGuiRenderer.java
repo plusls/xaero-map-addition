@@ -22,10 +22,10 @@ public abstract class MixinWaypointsGuiRenderer {
 
     @Inject(method = "render", at = @At(value = "RETURN"))
     private void drawHighlightWaypoint(XaeroMinimapSession minimapSession, MatrixStack matrixStack,
-                                       MinimapRendererHelper rendererHelper, double playerX, double playerZ,
-                                       int specW, int specH, double ps, double pc, float partial, double zoom,
-                                       boolean circle, float minimapScale, VertexConsumerProvider.Immediate renderTypeBuffer,
-                                       boolean safeMode, CallbackInfo ci) {
+                                       MinimapRendererHelper rendererHelper, double playerX, double playerY, double playerZ,
+                                       int specW, int specH, double ps, double pc, float partial, double zoom, boolean circle,
+                                       float minimapScale, VertexConsumerProvider.Immediate renderTypeBuffer, boolean safeMode,
+                                       CallbackInfo ci) {
         if (HighlightWaypointUtil.highlightPos == null) {
             return;
         }
