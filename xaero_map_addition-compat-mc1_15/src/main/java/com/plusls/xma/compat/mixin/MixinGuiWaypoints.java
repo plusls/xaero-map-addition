@@ -1,4 +1,4 @@
-package com.plusls.xma.mixin;
+package com.plusls.xma.compat.mixin;
 
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
 import com.plusls.xma.compat.gui.screen.CompatScreen;
@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -29,8 +30,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-@Dependencies(or = {@Dependency("xaerominimap"), @Dependency("xaerobetterpvp")},
-        and = @Dependency(value = "minecraft", versionPredicate = ">=1.16.5"))
+@Dependencies(or = {@Dependency("xaerominimap"), @Dependency("xaerobetterpvp")})
 @Mixin(value = GuiWaypoints.class, remap = false)
 public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownCallback {
 
@@ -55,7 +55,7 @@ public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownC
 
     @Inject(method = "init", at = @At(value = "RETURN"), remap = true)
     private void initXMAButtons(CallbackInfo ci) {
-        this.directDeleteButton = new MyTinyButton(this.width / 2 + 212, this.height - 53, new TranslatableComponent("xma.gui.button.direct_delete"),
+        this.directDeleteButton = new MyTinyButton(this.width / 2 + 212, this.height - 53, I18n.get("xma.gui.button.direct_delete"),
                 buttonWidget -> Objects.requireNonNull(this.minecraft).setScreen(new ConfirmScreen(result -> {
                     if (!result) {
                         Minecraft.getInstance().setScreen(this);
@@ -80,7 +80,7 @@ public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownC
                 }, new TranslatableComponent("xma.gui.title.direct_delete"), new TranslatableComponent("xma.gui.message.direct_delete"))));
         ((CompatScreen) this).addAbstractWidget(this.directDeleteButton);
         this.highlightButton = new MyTinyButton(this.width / 2 - 286, this.height - 53,
-                new TranslatableComponent("xma.gui.button.highlight_waypoint"), buttonWidget -> {
+                I18n.get("xma.gui.button.highlight_waypoint"), buttonWidget -> {
             ArrayList<Waypoint> selectedWaypoints = this.getSelectedWaypointsList();
             if (selectedWaypoints.size() >= 1) {
                 Waypoint w = selectedWaypoints.get(0);

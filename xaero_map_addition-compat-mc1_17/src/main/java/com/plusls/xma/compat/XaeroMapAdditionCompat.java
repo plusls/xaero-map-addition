@@ -1,5 +1,6 @@
 package com.plusls.xma.compat;
 
+import com.plusls.xma.compat.entity.PlayerCompatUtiImpl;
 import net.fabricmc.api.ClientModInitializer;
 import top.hendrixshen.magiclib.dependency.annotation.Dependencies;
 import top.hendrixshen.magiclib.dependency.annotation.Dependency;
@@ -14,5 +15,6 @@ public class XaeroMapAdditionCompat implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         RenderWaypointCompatUtilImpl.init();
+        PlayerCompatUtiImpl.init();
     }
 }

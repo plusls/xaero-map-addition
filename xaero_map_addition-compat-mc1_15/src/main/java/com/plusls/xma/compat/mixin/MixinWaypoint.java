@@ -1,4 +1,4 @@
-package com.plusls.xma.mixin;
+package com.plusls.xma.compat.mixin;
 
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
 import net.minecraft.client.gui.screens.Screen;
@@ -17,8 +17,7 @@ import xaero.map.mods.gui.WaypointMenuElement;
 
 import java.util.ArrayList;
 
-@Dependencies(and = {@Dependency("xaeroworldmap"),
-        @Dependency(value = "minecraft", versionPredicate = ">=1.16.5")})
+@Dependencies(and = {@Dependency("xaeroworldmap")})
 @Mixin(value = Waypoint.class, remap = false)
 public abstract class MixinWaypoint extends WaypointMenuElement implements Comparable<Waypoint>, IRightClickableElement {
 
@@ -27,8 +26,8 @@ public abstract class MixinWaypoint extends WaypointMenuElement implements Compa
 
 
     @Inject(method = "<init>", at = @At(value = "RETURN"))
-    private void addHighlightOption(Object original, int x, int y, int z, String name, String symbol, int color, int type,
-                                    boolean editable, String setName, boolean yIncluded, CallbackInfo ci) {
+    private void addHighlightOption(Object original, int x, int y, int z, String name, String symbol,
+                                    int color, int type, boolean editable, String setName, CallbackInfo ci) {
         rightClickOptions.add(new RightClickOption("xma.gui.xaero_right_click_map_highlight_waypoint", rightClickOptions.size(), this) {
             public void onAction(Screen screen) {
                 HighlightWaypointUtil.highlightPos = new BlockPos(x, y, z);

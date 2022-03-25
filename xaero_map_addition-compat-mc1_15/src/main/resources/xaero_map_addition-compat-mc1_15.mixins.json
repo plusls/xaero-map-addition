@@ -5,9 +5,17 @@
   "compatibilityLevel": "JAVA_8",
   "plugin": "top.hendrixshen.magiclib.dependency.mixin.MagicMixinPlugin",
   "client": [
-    "MixinScreen"
+    "MixinGuiWaypoints",
+    "MixinGuiWaypoints_List",
+    "MixinMapProcessor",
+    "MixinScreen",
+    "MixinSupportXaeroMinimap",
+    "MixinWaypointsGuiRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "MixinWaypoint"
+  ]
 }

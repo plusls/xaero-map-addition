@@ -1,6 +1,7 @@
 package com.plusls.xma.mixin;
 
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
+import com.plusls.xma.compat.entity.PlayerCompatUtilApi;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
@@ -11,6 +12,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import top.hendrixshen.magiclib.dependency.annotation.Dependencies;
+import top.hendrixshen.magiclib.dependency.annotation.Dependency;
 import xaero.map.WorldMap;
 import xaero.map.gui.GuiMap;
 import xaero.map.gui.IRightClickableElement;
@@ -20,6 +23,7 @@ import xaero.map.mods.SupportMods;
 
 import java.util.ArrayList;
 
+@Dependencies(and = @Dependency("xaeroworldmap"))
 @Mixin(value = GuiMap.class, remap = false)
 public abstract class MixinGuiMap extends ScreenBase implements IRightClickableElement {
 
@@ -39,7 +43,7 @@ public abstract class MixinGuiMap extends ScreenBase implements IRightClickableE
         final int playerY;
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            playerY = player.blockPosition().getY();
+            playerY = PlayerCompatUtilApi.getInstance().getBlockPos(player).getY();
         } else {
             playerY = 32767;
         }

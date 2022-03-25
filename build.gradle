@@ -37,6 +37,10 @@ dependencies {
         runtimeOnly(fileTree(dir: "xaero_map_addition-compat-mc1_18/build/devlibs", include: ["*-dev.jar"]))
     }
 
+    subprojects.each {
+        include project("${it.name}:")
+    }
+
 }
 
 allprojects {

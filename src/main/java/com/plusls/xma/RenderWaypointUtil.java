@@ -3,7 +3,6 @@ package com.plusls.xma;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Matrix4f;
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointResourceLoader;
@@ -26,16 +25,13 @@ public class RenderWaypointUtil {
     public static float fade = 1.0f;
 
 
-    public static void drawHighlightWaypointPTC(PoseStack matrixStack) {
+    public static void drawHighlightWaypointPTC(Matrix4f matrix4f) {
         RenderWaypointCompatUtilApi.getInstance().setPositionTexColorShader();
         RenderWaypointCompatUtilApi.getInstance().setTexture(TextureAtlas.LOCATION_BLOCKS);
         RenderSystem.enableBlend();
         BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
 
         TextureAtlasSprite icon = HighlightWaypointResourceLoader.targetIdSprite;
-        Matrix4f matrix4f = matrixStack.last().pose();
-
-
         RenderWaypointCompatUtilApi.getInstance()
                 .bufferBuilderBegin(bufferBuilder, RenderWaypointCompatUtilApi.BufferBuilderBeginMode.QUADS,
                         DefaultVertexFormat.POSITION_TEX_COLOR);

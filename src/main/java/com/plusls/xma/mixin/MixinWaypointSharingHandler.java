@@ -10,10 +10,15 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import top.hendrixshen.magiclib.dependency.annotation.Dependencies;
+import top.hendrixshen.magiclib.dependency.annotation.Dependency;
 import xaero.common.minimap.waypoints.Waypoint;
 import xaero.common.minimap.waypoints.WaypointSharingHandler;
 import xaero.common.settings.ModSettings;
 
+// 1.15 TODO
+@Dependencies(or = {@Dependency("xaerominimap"), @Dependency("xaerobetterpvp")},
+        and = @Dependency(value = "minecraft", versionPredicate = ">=1.16.5"))
 @Mixin(value = WaypointSharingHandler.class, remap = false)
 public abstract class MixinWaypointSharingHandler {
 

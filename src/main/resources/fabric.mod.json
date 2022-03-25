@@ -25,6 +25,7 @@
   "depends": {
     "fabricloader": ">=0.11.3",
     "minecraft": "*",
-    "ommc": "*"
+    "ommc": "*",
+    "magiclib": ">=0.3.15"
   }
 }

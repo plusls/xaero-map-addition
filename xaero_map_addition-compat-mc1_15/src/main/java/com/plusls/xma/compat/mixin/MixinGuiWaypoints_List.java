@@ -1,6 +1,7 @@
-package com.plusls.xma.mixin;
+package com.plusls.xma.compat.mixin;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.math.Transformation;
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
 import com.plusls.xma.RenderWaypointUtil;
 import net.minecraft.core.BlockPos;
@@ -12,21 +13,20 @@ import top.hendrixshen.magiclib.dependency.annotation.Dependencies;
 import top.hendrixshen.magiclib.dependency.annotation.Dependency;
 import xaero.common.minimap.waypoints.Waypoint;
 
-@Dependencies(or = {@Dependency("xaerominimap"), @Dependency("xaerobetterpvp")},
-        and = @Dependency(value = "minecraft", versionPredicate = ">=1.16.5"))
+@Dependencies(or = {@Dependency("xaerominimap"), @Dependency("xaerobetterpvp")})
 @Mixin(targets = "xaero.common.gui.GuiWaypoints$List", remap = false)
 public class MixinGuiWaypoints_List {
     @Inject(method = "drawWaypointSlot", at = @At(value = "RETURN"))
-    private void drawHighlightWaypoint(PoseStack matrixStack, Waypoint w, int x, int y, CallbackInfo ci) {
+    private void drawHighlightWaypoint(Waypoint w, int x, int y, CallbackInfo ci) {
         if (w == null) {
             return;
         }
         BlockPos pos = new BlockPos(w.getX(), w.getY(), w.getZ());
         if (pos.equals(HighlightWaypointUtil.highlightPos)) {
-            matrixStack.pushPose();
-            matrixStack.translate(x + 200, y + 7, 1.0D);
-            RenderWaypointUtil.drawHighlightWaypointPTC(matrixStack.last().pose());
-            matrixStack.popPose();
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(x + 200, y + 7, 1.0D);
+            RenderWaypointUtil.drawHighlightWaypointPTC(Transformation.identity().getMatrix());
+            RenderSystem.popMatrix();
         }
     }
 }
