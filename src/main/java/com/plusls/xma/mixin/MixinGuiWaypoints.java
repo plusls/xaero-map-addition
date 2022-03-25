@@ -1,13 +1,14 @@
 package com.plusls.xma.mixin;
 
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ConfirmScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.math.BlockPos;
+import com.plusls.xma.compat.gui.screen.CompatScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.ConfirmScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,8 +30,8 @@ import java.util.concurrent.ConcurrentSkipListSet;
 @Mixin(value = GuiWaypoints.class, remap = false)
 public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownCallback {
 
-    private ButtonWidget directDeleteButton;
-    private ButtonWidget highlightButton;
+    private Button directDeleteButton;
+    private Button highlightButton;
 
     @Shadow
     private WaypointWorld displayedWorld;
@@ -38,7 +39,7 @@ public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownC
     @Shadow
     private ConcurrentSkipListSet<Integer> selectedListSet;
 
-    protected MixinGuiWaypoints(AXaeroMinimap modMain, Screen parent, Screen escape, Text titleIn) {
+    protected MixinGuiWaypoints(AXaeroMinimap modMain, Screen parent, Screen escape, Component titleIn) {
         super(modMain, parent, escape, titleIn);
     }
 
@@ -48,12 +49,12 @@ public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownC
     @Shadow
     protected abstract ArrayList<Waypoint> getSelectedWaypointsList();
 
-    @Inject(method = "init", at = @At(value = "HEAD"), remap = true)
+    @Inject(method = "init", at = @At(value = "RETURN"), remap = true)
     private void initXMAButtons(CallbackInfo ci) {
-        this.directDeleteButton = new MyTinyButton(this.width / 2 + 212, this.height - 53, new TranslatableText("xma.gui.button.direct_delete"),
-                buttonWidget -> Objects.requireNonNull(this.client).setScreen(new ConfirmScreen(result -> {
+        this.directDeleteButton = new MyTinyButton(this.width / 2 + 212, this.height - 53, new TranslatableComponent("xma.gui.button.direct_delete"),
+                buttonWidget -> Objects.requireNonNull(this.minecraft).setScreen(new ConfirmScreen(result -> {
                     if (!result) {
-                        MinecraftClient.getInstance().setScreen(this);
+                        Minecraft.getInstance().setScreen(this);
                         return;
                     }
                     ArrayList<Waypoint> selectedWaypoints = this.getSelectedWaypointsList();
@@ -71,12 +72,11 @@ public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownC
                     } catch (IOException var5) {
                         var5.printStackTrace();
                     }
-                    MinecraftClient.getInstance().setScreen(this);
-                }, new TranslatableText("xma.gui.title.direct_delete"), new TranslatableText("xma.gui.message.direct_delete"))));
-
-        this.addDrawableChild(this.directDeleteButton);
+                    Minecraft.getInstance().setScreen(this);
+                }, new TranslatableComponent("xma.gui.title.direct_delete"), new TranslatableComponent("xma.gui.message.direct_delete"))));
+        ((CompatScreen) this).addAbstractWidget(this.directDeleteButton);
         this.highlightButton = new MyTinyButton(this.width / 2 - 286, this.height - 53,
-                new TranslatableText("xma.gui.button.highlight_waypoint"), buttonWidget -> {
+                new TranslatableComponent("xma.gui.button.highlight_waypoint"), buttonWidget -> {
             ArrayList<Waypoint> selectedWaypoints = this.getSelectedWaypointsList();
             if (selectedWaypoints.size() >= 1) {
                 Waypoint w = selectedWaypoints.get(0);
@@ -85,7 +85,7 @@ public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownC
             }
 
         });
-        this.addDrawableChild(this.highlightButton);
+        ((CompatScreen) this).addAbstractWidget(this.highlightButton);
     }
 
     @Inject(method = "updateButtons", at = @At(value = "HEAD"))

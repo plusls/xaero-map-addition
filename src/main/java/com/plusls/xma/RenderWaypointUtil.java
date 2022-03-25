@@ -1,12 +1,15 @@
 package com.plusls.xma;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.math.Matrix4f;
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointResourceLoader;
-import net.minecraft.client.render.*;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.screen.PlayerScreenHandler;
-import net.minecraft.util.math.Matrix4f;
+import com.plusls.xma.compat.RenderWaypointCompatUtilApi;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 public class RenderWaypointUtil {
 
@@ -23,21 +26,25 @@ public class RenderWaypointUtil {
     public static float fade = 1.0f;
 
 
-    public static void drawHighlightWaypointPTC(MatrixStack matrixStack) {
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-        RenderSystem.setShaderTexture(0, PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
+    public static void drawHighlightWaypointPTC(PoseStack matrixStack) {
+        RenderWaypointCompatUtilApi.getInstance().setPositionTexColorShader();
+        RenderWaypointCompatUtilApi.getInstance().setTexture(TextureAtlas.LOCATION_BLOCKS);
+        RenderSystem.enableBlend();
+        BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
 
-        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        TextureAtlasSprite icon = HighlightWaypointResourceLoader.targetIdSprite;
+        Matrix4f matrix4f = matrixStack.last().pose();
 
-        Sprite icon = HighlightWaypointResourceLoader.targetIdSprite;
-        Matrix4f matrix4f = matrixStack.peek().getPositionMatrix();
 
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-        bufferBuilder.vertex(matrix4f, -xWidth, -yWidth, 0.0f).texture(icon.getMinU(), icon.getMinV()).color(iconR, iconG, iconB, fade).next();
-        bufferBuilder.vertex(matrix4f, -xWidth, yWidth, 0.0f).texture(icon.getMinU(), icon.getMaxV()).color(iconR, iconG, iconB, fade).next();
-        bufferBuilder.vertex(matrix4f, xWidth, yWidth, 0.0f).texture(icon.getMaxU(), icon.getMaxV()).color(iconR, iconG, iconB, fade).next();
-        bufferBuilder.vertex(matrix4f, xWidth, -yWidth, 0.0f).texture(icon.getMaxU(), icon.getMinV()).color(iconR, iconG, iconB, fade).next();
+        RenderWaypointCompatUtilApi.getInstance()
+                .bufferBuilderBegin(bufferBuilder, RenderWaypointCompatUtilApi.BufferBuilderBeginMode.QUADS,
+                        DefaultVertexFormat.POSITION_TEX_COLOR);
 
-        Tessellator.getInstance().draw();
+        bufferBuilder.vertex(matrix4f, -xWidth, -yWidth, 0.0f).uv(icon.getU0(), icon.getV0()).color(iconR, iconG, iconB, fade).endVertex();
+        bufferBuilder.vertex(matrix4f, -xWidth, yWidth, 0.0f).uv(icon.getU0(), icon.getV1()).color(iconR, iconG, iconB, fade).endVertex();
+        bufferBuilder.vertex(matrix4f, xWidth, yWidth, 0.0f).uv(icon.getU1(), icon.getV1()).color(iconR, iconG, iconB, fade).endVertex();
+        bufferBuilder.vertex(matrix4f, xWidth, -yWidth, 0.0f).uv(icon.getU1(), icon.getV0()).color(iconR, iconG, iconB, fade).endVertex();
+
+        Tesselator.getInstance().end();
     }
 }

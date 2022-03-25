@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "xaero_map_addition-compat-mc1_17",
+  "version": "${version}",
+  "name": "Xaero Map Addition Compat",
+  "description": "Xaero Map Addition compat for Minecraft 1.17.x",
+  "authors": [
+    "plusls"
+  ],
+  "contact": {
+    "homepage": "https://blog.plusls.com/",
+    "sources": "https://github.com/plusls/xaero-map-addition"
+  },
+  "license": "MPL-2.0",
+  "icon": "assets/xaero_map_addition-compat-mc1_17/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.plusls.xma.compat.XaeroMapAdditionCompat"
+    ]
+  },
+  "mixins": [
+    "xaero_map_addition-compat-mc1_17.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "minecraft": "1.17.x"
+  }
+}

@@ -1,9 +1,9 @@
 package com.plusls.xma.mixin;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
 import com.plusls.xma.RenderWaypointUtil;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.renderer.MultiBufferSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,19 +17,19 @@ import xaero.common.minimap.waypoints.render.WaypointsGuiRenderer;
 public abstract class MixinWaypointsGuiRenderer {
 
     @Shadow
-    public abstract void translatePosition(MatrixStack matrixStack, int specW, int specH, double ps, double pc,
+    public abstract void translatePosition(PoseStack matrixStack, int specW, int specH, double ps, double pc,
                                            double offx, double offy, double zoom, boolean circle);
 
     @Inject(method = "render", at = @At(value = "RETURN"))
-    private void drawHighlightWaypoint(XaeroMinimapSession minimapSession, MatrixStack matrixStack,
+    private void drawHighlightWaypoint(XaeroMinimapSession minimapSession, PoseStack matrixStack,
                                        MinimapRendererHelper rendererHelper, double playerX, double playerY, double playerZ,
                                        int specW, int specH, double ps, double pc, float partial, double zoom, boolean circle,
-                                       float minimapScale, VertexConsumerProvider.Immediate renderTypeBuffer, boolean safeMode,
+                                       float minimapScale, MultiBufferSource.BufferSource renderTypeBuffer, boolean safeMode,
                                        CallbackInfo ci) {
         if (HighlightWaypointUtil.highlightPos == null) {
             return;
         }
-        matrixStack.push();
+        matrixStack.pushPose();
         matrixStack.translate(0.0D, 0.0D, -980.0D);
         double offx = (double) HighlightWaypointUtil.highlightPos.getX() + 0.5D - playerX;
         double offz = (double) HighlightWaypointUtil.highlightPos.getZ() + 0.5D - playerZ;
@@ -41,8 +41,8 @@ public abstract class MixinWaypointsGuiRenderer {
 
         RenderWaypointUtil.drawHighlightWaypointPTC(matrixStack);
 
-        matrixStack.pop();
-        matrixStack.pop();
+        matrixStack.popPose();
+        matrixStack.popPose();
 
     }
 }

@@ -1,11 +1,11 @@
 package com.plusls.xma.mixin;
 
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,16 +30,16 @@ public abstract class MixinGuiMap extends ScreenBase implements IRightClickableE
     @Shadow
     private int rightClickZ;
 
-    protected MixinGuiMap(Screen parent, Screen escape, Text titleIn) {
+    protected MixinGuiMap(Screen parent, Screen escape, Component titleIn) {
         super(parent, escape, titleIn);
     }
 
     @Inject(method = "getRightClickOptions", at = @At(value = "RETURN"))
     private void addHighlightOption(CallbackInfoReturnable<ArrayList<RightClickOption>> cir) {
         final int playerY;
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            playerY = player.getBlockY();
+            playerY = player.blockPosition().getY();
         } else {
             playerY = 32767;
         }

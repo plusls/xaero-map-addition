@@ -1,70 +1,116 @@
 plugins {
-    id("fabric-loom").version("0.11-SNAPSHOT")
+    id("fabric-loom").version("0.12-SNAPSHOT")
     id("maven-publish")
     id("org.ajoberstar.grgit").version("4.1.0")
     id("com.modrinth.minotaur").version("1.2.1")
 }
 
-setSourceCompatibility(JavaVersion.toVersion(project.java_version))
-setTargetCompatibility(JavaVersion.toVersion(project.java_version))
 String real_version = "${project.mod_version}"
 
 if (project.pre_release != "") {
     real_version += "-${project.pre_release}+"
-    if (project.pre_release == "alpha" && !grgit.status().clean) {
-        real_version += new Date().format("yyyyMMdd.HHmmss") + ".dirty." + grgit.head().abbreviatedId
-    } else {
-        real_version += grgit.head().abbreviatedId
-    }
+    real_version += grgit.head().abbreviatedId
 }
 
-setArchivesBaseName("${project.archives_base_name}-${project.minecraft_version}")
 setVersion(real_version)
 setGroup(project.maven_group)
-
-repositories {
-    maven {
-        url = "https://www.cursemaven.com"
-    }
-    mavenCentral()
-}
 
 
 dependencies {
     minecraft("com.mojang:minecraft:${project.minecraft_version}")
-    //mappings("net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2")
-    // fuck xaero
-    mappings("net.fabricmc:yarn:1.18-pre5+build.10:v2")
-    modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
-    modImplementation("curse.maven:xaeros-world-map-317780:${project.xaero_world_map_version}")
-    modImplementation("curse.maven:xaeros-minimap-263420:${project.xaero_minimap_version}")
-    modImplementation("curse.maven:ommc-454900:${project.ommc_version}")
 
-    modRuntimeOnly("curse.maven:malilib-303119:${project.malilib_version}")
-    modRuntimeOnly("curse.maven:lazydfu-433518:${project.lazydfu_version}")
-    modRuntimeOnly("curse.maven:in-game-account-switcher-232676:${project.in_game_account_switcher_version}")
-    modRuntimeOnly("curse.maven:imblockerfabric-399225:${project.imblockerfabric}")
+    modCompileOnly("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
+    modCompileOnly("curse.maven:malilib-303119:${project.malilib_version}")
+    modCompileOnly("curse.maven:xaeros-world-map-317780:${project.xaero_world_map_version}")
+    modCompileOnly("curse.maven:xaeros-minimap-263420:${project.xaero_minimap_version}")
+    modCompileOnly("curse.maven:ommc-454900:${project.ommc_version}")
+
+    if (project.gradle.startParameter.projectDir != null &&
+            !project.gradle.startParameter.projectDir.getName().startsWith("xaero_map_addition-compat")) {
+        modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
+        modRuntimeOnly("curse.maven:modmenu-308702:${project.modmenu_version}")
+        modRuntimeOnly("curse.maven:malilib-303119:${project.malilib_version}")
+        modRuntimeOnly("curse.maven:xaeros-world-map-317780:${project.xaero_world_map_version}")
+        modRuntimeOnly("curse.maven:xaeros-minimap-263420:${project.xaero_minimap_version}")
+        modRuntimeOnly("curse.maven:ommc-454900:${project.ommc_version}")
+        modRuntimeOnly("curse.maven:imblockerfabric-399225:${project.imblockerfabric}")
+        runtimeOnly(fileTree(dir: "xaero_map_addition-compat-mc1_18/build/devlibs", include: ["*-dev.jar"]))
+    }
+
 }
 
-processResources {
-    inputs.property("version", real_version)
-    filesMatching("fabric.mod.json") {
-        expand(["version": real_version])
+allprojects {
+    apply plugin: "maven-publish"
+    apply plugin: "fabric-loom"
+
+    loom.runConfigs.configureEach {
+        property("mixin.debug.export", "true")
+    }
+
+    version = rootProject.version
+    group = rootProject.group
+
+    repositories {
+        maven {
+            url 'https://www.cursemaven.com/'
+        }
+        maven {
+            url = "https://api.modrinth.com/maven"
+        }
+        maven {
+            url 'https://maven.hendrixshen.top'
+        }
+        mavenCentral()
+    }
+
+    dependencies {
+        mappings(loom.officialMojangMappings())
+        modImplementation("net.fabricmc:fabric-loader:${rootProject.loader_version}")
+        modImplementation("top.hendrixshen.magiclib:magiclib:${project.magiclib_version}")
+
+        modRuntimeOnly("curse.maven:lazydfu-433518:${rootProject.lazydfu_version}")
+        //modRuntimeOnly("curse.maven:imblockerfabric-399225:${rootProject.imblockerfabric}")
+    }
+
+    runClient {
+        defaultCharacterEncoding = "UTF-8"
+    }
+
+    runServer {
+        defaultCharacterEncoding = "UTF-8"
+    }
+
+    java {
+        withSourcesJar()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = "UTF-8"
+        it.sourceCompatibility = JavaVersion.VERSION_1_8
+        it.targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+
+    processResources {
+        inputs.property("version", rootProject.version)
+        filesMatching("fabric.mod.json") {
+            expand(["version": rootProject.version])
+        }
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = "UTF-8"
-    it.options.release.set(Integer.parseInt(project.java_version as String))
+subprojects {
+    if (project.gradle.startParameter.taskNames.size() == 1 && project.gradle.startParameter.taskNames.get(0) == "runClient") {
+        dependencies {
+            modImplementation(rootProject)
+        }
+    } else {
+        dependencies {
+            implementation(rootProject)
+        }
+    }
 }
 
-java {
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
-    // withSourcesJar()
-}
 
 jar {
     from("LICENSE") {

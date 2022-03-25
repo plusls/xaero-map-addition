@@ -1,8 +1,8 @@
 package com.plusls.xma.mixin;
 
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

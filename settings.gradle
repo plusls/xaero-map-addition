@@ -7,3 +7,12 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+
+if (!(gradle.startParameter.taskNames.size() == 1 && gradle.startParameter.taskNames.get(0) == "runClient") ||
+        (gradle.startParameter.projectDir != null && gradle.startParameter.projectDir.getName().startsWith("xaero_map_addition-compat"))) {
+    include "xaero_map_addition-compat-mc1_15"
+    include "xaero_map_addition-compat-mc1_16"
+    include "xaero_map_addition-compat-mc1_17"
+    include "xaero_map_addition-compat-mc1_18"
+}

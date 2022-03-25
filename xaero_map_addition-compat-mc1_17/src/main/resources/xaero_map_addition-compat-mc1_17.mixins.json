@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.plusls.xma.compat.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "MixinScreen"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
