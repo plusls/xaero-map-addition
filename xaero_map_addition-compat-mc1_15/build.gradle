@@ -2,7 +2,7 @@ dependencies {
     minecraft("com.mojang:minecraft:${project.minecraft_version}")
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
-    //modImplementation("curse.maven:modmenu-308702:${project.modmenu_version}")
+    modImplementation("curse.maven:modmenu-308702:${project.modmenu_version}")
     modImplementation("curse.maven:malilib-303119:${project.malilib_version}")
     modImplementation("curse.maven:xaeros-world-map-317780:${project.xaero_world_map_version}")
     modImplementation("curse.maven:xaeros-minimap-263420:${project.xaero_minimap_version}")

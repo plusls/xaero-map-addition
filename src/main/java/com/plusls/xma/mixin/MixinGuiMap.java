@@ -1,7 +1,7 @@
 package com.plusls.xma.mixin;
 
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
-import com.plusls.xma.compat.entity.PlayerCompatUtilApi;
+import com.plusls.xma.compat.entity.PlayerCompatApi;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
@@ -43,7 +43,7 @@ public abstract class MixinGuiMap extends ScreenBase implements IRightClickableE
         final int playerY;
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            playerY = PlayerCompatUtilApi.getInstance().getBlockPos(player).getY();
+            playerY = PlayerCompatApi.getInstance().getBlockPos(player).getY();
         } else {
             playerY = 32767;
         }

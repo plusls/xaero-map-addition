@@ -8,10 +8,9 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.Objects;
 
-public class RenderWaypointCompatUtilImpl extends RenderWaypointCompatUtilApi {
-
+public class RenderWaypointCompatImpl extends RenderWaypointCompatApi {
     public static void init() {
-        INSTANCE = new RenderWaypointCompatUtilImpl();
+        INSTANCE = new RenderWaypointCompatImpl();
     }
 
     @Override

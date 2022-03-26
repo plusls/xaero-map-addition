@@ -3,11 +3,11 @@ package com.plusls.xma.compat.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 
-public abstract class PlayerCompatUtilApi {
+public abstract class PlayerCompatApi {
 
-    protected static PlayerCompatUtilApi INSTANCE;
+    protected static PlayerCompatApi INSTANCE;
 
-    public static PlayerCompatUtilApi getInstance() {
+    public static PlayerCompatApi getInstance() {
         return INSTANCE;
     }
 

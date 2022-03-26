@@ -4,10 +4,10 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.resources.ResourceLocation;
 
-public abstract class RenderWaypointCompatUtilApi {
-    protected static RenderWaypointCompatUtilApi INSTANCE;
+public abstract class RenderWaypointCompatApi {
+    protected static RenderWaypointCompatApi INSTANCE;
 
-    public static RenderWaypointCompatUtilApi getInstance() {
+    public static RenderWaypointCompatApi getInstance() {
         return INSTANCE;
     }
 

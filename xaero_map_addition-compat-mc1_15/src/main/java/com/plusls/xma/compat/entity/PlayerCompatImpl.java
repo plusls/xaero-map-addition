@@ -3,9 +3,9 @@ package com.plusls.xma.compat.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 
-public class PlayerCompatUtiImpl extends PlayerCompatUtilApi {
+public class PlayerCompatImpl extends PlayerCompatApi {
     public static void init() {
-        INSTANCE = new PlayerCompatUtiImpl();
+        INSTANCE = new PlayerCompatImpl();
     }
 
     @Override

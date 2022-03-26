@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Matrix4f;
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointResourceLoader;
-import com.plusls.xma.compat.RenderWaypointCompatUtilApi;
+import com.plusls.xma.compat.RenderWaypointCompatApi;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
@@ -26,14 +26,14 @@ public class RenderWaypointUtil {
 
 
     public static void drawHighlightWaypointPTC(Matrix4f matrix4f) {
-        RenderWaypointCompatUtilApi.getInstance().setPositionTexColorShader();
-        RenderWaypointCompatUtilApi.getInstance().setTexture(TextureAtlas.LOCATION_BLOCKS);
+        RenderWaypointCompatApi.getInstance().setPositionTexColorShader();
+        RenderWaypointCompatApi.getInstance().setTexture(TextureAtlas.LOCATION_BLOCKS);
         RenderSystem.enableBlend();
         BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
 
         TextureAtlasSprite icon = HighlightWaypointResourceLoader.targetIdSprite;
-        RenderWaypointCompatUtilApi.getInstance()
-                .bufferBuilderBegin(bufferBuilder, RenderWaypointCompatUtilApi.BufferBuilderBeginMode.QUADS,
+        RenderWaypointCompatApi.getInstance()
+                .bufferBuilderBegin(bufferBuilder, RenderWaypointCompatApi.BufferBuilderBeginMode.QUADS,
                         DefaultVertexFormat.POSITION_TEX_COLOR);
 
         bufferBuilder.vertex(matrix4f, -xWidth, -yWidth, 0.0f).uv(icon.getU0(), icon.getV0()).color(iconR, iconG, iconB, fade).endVertex();

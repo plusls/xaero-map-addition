@@ -70,7 +70,7 @@ allprojects {
     dependencies {
         mappings(loom.officialMojangMappings())
         modImplementation("net.fabricmc:fabric-loader:${rootProject.loader_version}")
-        modImplementation("top.hendrixshen.magiclib:magiclib:${project.magiclib_version}")
+        modCompileOnly("top.hendrixshen.magiclib:magiclib:${project.magiclib_version}")
 
         modRuntimeOnly("curse.maven:lazydfu-433518:${rootProject.lazydfu_version}")
         //modRuntimeOnly("curse.maven:imblockerfabric-399225:${rootProject.imblockerfabric}")

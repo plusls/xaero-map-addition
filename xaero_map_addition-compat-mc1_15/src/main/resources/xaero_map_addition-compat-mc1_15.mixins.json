@@ -7,15 +7,17 @@
   "client": [
     "MixinGuiWaypoints",
     "MixinGuiWaypoints_List",
-    "MixinMapProcessor",
-    "MixinScreen",
     "MixinSupportXaeroMinimap",
-    "MixinWaypointsGuiRenderer"
+    "MixinWaypoint",
+    "MixinWaypointsGuiRenderer",
+    "compat.chat.MixinStyle",
+    "compat.chat.MixinTextComponent",
+    "compat.chat.MixinTranslatableComponent",
+    "compat.dev.mojang.MixinEntityIconPrerenderer",
+    "compat.dev.mojang.MixinMapProcessor",
+    "compat.screen.MixinScreen"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "mixins": [
-    "MixinWaypoint"
-  ]
+  }
 }

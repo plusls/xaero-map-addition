@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RenderWaypointCompatUtilImpl extends RenderWaypointCompatUtilApi {
+public class RenderWaypointCompatImpl extends RenderWaypointCompatApi {
     private static final Map<BufferBuilderBeginMode, VertexFormat.Mode> bufferBuilderBeginModeMap = new HashMap<>();
 
     static {
@@ -17,7 +17,7 @@ public class RenderWaypointCompatUtilImpl extends RenderWaypointCompatUtilApi {
     }
 
     public static void init() {
-        INSTANCE = new RenderWaypointCompatUtilImpl();
+        INSTANCE = new RenderWaypointCompatImpl();
     }
 
     @Override

@@ -1,12 +1,9 @@
 package com.plusls.xma.mixin;
 
-import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
+import com.plusls.xma.ButtonUtil;
 import com.plusls.xma.compat.gui.screen.CompatScreen;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,9 +21,7 @@ import xaero.common.gui.ScreenBase;
 import xaero.common.minimap.waypoints.Waypoint;
 import xaero.common.minimap.waypoints.WaypointWorld;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 @Dependencies(or = {@Dependency("xaerominimap"), @Dependency("xaerobetterpvp")},
@@ -55,40 +50,17 @@ public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownC
 
     @Inject(method = "init", at = @At(value = "RETURN"), remap = true)
     private void initXMAButtons(CallbackInfo ci) {
-        this.directDeleteButton = new MyTinyButton(this.width / 2 + 212, this.height - 53, new TranslatableComponent("xma.gui.button.direct_delete"),
-                buttonWidget -> Objects.requireNonNull(this.minecraft).setScreen(new ConfirmScreen(result -> {
-                    if (!result) {
-                        Minecraft.getInstance().setScreen(this);
-                        return;
-                    }
-                    ArrayList<Waypoint> selectedWaypoints = this.getSelectedWaypointsList();
-
-                    for (Waypoint selected : selectedWaypoints) {
-                        this.displayedWorld.getCurrentSet().getList().remove(selected);
-                    }
-
-                    this.selectedListSet.clear();
-
-                    this.updateSortedList();
-
-                    try {
-                        this.modMain.getSettings().saveWaypoints(this.displayedWorld);
-                    } catch (IOException var5) {
-                        var5.printStackTrace();
-                    }
-                    Minecraft.getInstance().setScreen(this);
-                }, new TranslatableComponent("xma.gui.title.direct_delete"), new TranslatableComponent("xma.gui.message.direct_delete"))));
+        this.directDeleteButton = new MyTinyButton(this.width / 2 + 212, this.height - 53,
+                new TranslatableComponent("xma.gui.button.direct_delete"),
+                ButtonUtil.getDirectDeleteButtonOnPress(this,
+                        this.displayedWorld, this.selectedListSet, this::getSelectedWaypointsList,
+                        this::updateSortedList, this.modMain
+                ));
         ((CompatScreen) this).addAbstractWidget(this.directDeleteButton);
-        this.highlightButton = new MyTinyButton(this.width / 2 - 286, this.height - 53,
-                new TranslatableComponent("xma.gui.button.highlight_waypoint"), buttonWidget -> {
-            ArrayList<Waypoint> selectedWaypoints = this.getSelectedWaypointsList();
-            if (selectedWaypoints.size() >= 1) {
-                Waypoint w = selectedWaypoints.get(0);
-                HighlightWaypointUtil.highlightPos = new BlockPos(w.getX(), w.getY(), w.getZ());
-                HighlightWaypointUtil.lastBeamTime = System.currentTimeMillis() + 10000L;
-            }
 
-        });
+        this.highlightButton = new MyTinyButton(this.width / 2 - 286, this.height - 53,
+                new TranslatableComponent("xma.gui.button.highlight_waypoint"),
+                ButtonUtil.getHighlightButtonOnPress(this::getSelectedWaypointsList));
         ((CompatScreen) this).addAbstractWidget(this.highlightButton);
     }
 

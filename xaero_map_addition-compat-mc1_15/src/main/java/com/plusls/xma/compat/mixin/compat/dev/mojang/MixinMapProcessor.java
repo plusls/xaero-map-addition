@@ -1,4 +1,4 @@
-package com.plusls.xma.compat.mixin;
+package com.plusls.xma.compat.mixin.compat.dev.mojang;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -9,7 +9,7 @@ import top.hendrixshen.magiclib.dependency.annotation.Dependency;
 import xaero.map.MapProcessor;
 
 // fix crash in mojang mapping
-@Dependencies(and = @Dependency("xaeroworldmap"), predicate = Predicates.DevMixinPredicate.class)
+@Dependencies(and = @Dependency("xaeroworldmap"), predicate = Predicates.DevMojangMixinPredicate.class)
 @Mixin(MapProcessor.class)
 public class MixinMapProcessor {
     @ModifyConstant(method = "<init>", constant = @Constant(stringValue = "renderTaskQueue", ordinal = 0))

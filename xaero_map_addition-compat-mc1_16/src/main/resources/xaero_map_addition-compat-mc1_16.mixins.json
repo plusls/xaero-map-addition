@@ -5,7 +5,10 @@
   "compatibilityLevel": "JAVA_8",
   "plugin": "top.hendrixshen.magiclib.dependency.mixin.MagicMixinPlugin",
   "client": [
-    "MixinScreen"
+    "compat.chat.MixinStyle",
+    "compat.chat.MixinTextComponent",
+    "compat.chat.MixinTranslatableComponent",
+    "compat.screen.MixinScreen"
   ],
   "injectors": {
     "defaultRequire": 1

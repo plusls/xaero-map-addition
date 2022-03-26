@@ -1,6 +1,8 @@
 package com.plusls.xma.mixin;
 
 import com.plusls.xma.ModInfo;
+import com.plusls.xma.compat.chat.CompatComponent;
+import com.plusls.xma.compat.chat.ComponentCompatApi;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.*;
@@ -14,17 +16,16 @@ import top.hendrixshen.magiclib.dependency.annotation.Dependencies;
 import top.hendrixshen.magiclib.dependency.annotation.Dependency;
 import xaero.common.minimap.waypoints.Waypoint;
 import xaero.common.minimap.waypoints.WaypointSharingHandler;
-import xaero.common.settings.ModSettings;
 
-// 1.15 TODO
 @Dependencies(or = {@Dependency("xaerominimap"), @Dependency("xaerobetterpvp")},
-        and = @Dependency(value = "minecraft", versionPredicate = ">=1.16.5"))
+        and = @Dependency(value = "minecraft"))
 @Mixin(value = WaypointSharingHandler.class, remap = false)
 public abstract class MixinWaypointSharingHandler {
 
     @Shadow
     protected abstract String restoreFormatting(String s);
 
+    @SuppressWarnings("ConstantConditions")
     @Inject(method = "onWaypointReceived", at = @At(value = "HEAD"), cancellable = true)
     private void betterOnWaypointReceived(String text, ClientboundChatPacket e, CallbackInfo ci) {
         text = text.replaceAll("§.", "");
@@ -87,11 +88,12 @@ public abstract class MixinWaypointSharingHandler {
                 }
             }
             if (dimId == 0) {
-                dimensionText = new TranslatableComponent("createWorld.customize.preset.overworld").withStyle(ChatFormatting.DARK_GREEN);
+                // 1.15 不存在 TranslatableComponent.<init>(Ljava/lang/String;)V
+                dimensionText = ((CompatComponent) new TranslatableComponent("createWorld.customize.preset.overworld", new Object[0])).withStyleCompat(ChatFormatting.DARK_GREEN);
             } else if (dimId == 1) {
-                dimensionText = new TranslatableComponent("advancements.end.root.title").withStyle(ChatFormatting.DARK_PURPLE);
+                dimensionText = ((CompatComponent) new TranslatableComponent("advancements.end.root.title", new Object[0])).withStyleCompat(ChatFormatting.DARK_PURPLE);
             } else if (dimId == -1) {
-                dimensionText = new TranslatableComponent("advancements.nether.root.title").withStyle(ChatFormatting.DARK_RED);
+                dimensionText = ((CompatComponent) new TranslatableComponent("advancements.nether.root.title", new Object[0])).withStyleCompat(ChatFormatting.DARK_RED);
             }
 
             StringBuilder addCommandBuilder = new StringBuilder();
@@ -103,32 +105,33 @@ public abstract class MixinWaypointSharingHandler {
             }
 
             String addCommand = addCommandBuilder.toString();
-            Component addWaypointText = new TextComponent("[+X]")
-                    .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, addCommand))
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("xma.gui.message.xaero_add_waypoint")))
-                            .withColor(TextColor.fromLegacyFormat(ChatFormatting.GOLD)));
+            Component addWaypointText = ((CompatComponent) new TextComponent("[+X]"))
+                    .withStyleCompat((Style) ComponentCompatApi.getInstance().getEmptyStyle()
+                            .withClickEventCompat(new ClickEvent(ClickEvent.Action.RUN_COMMAND, addCommand))
+                            .withHoverEventCompat(ComponentCompatApi.getInstance().newHoverEvent(ComponentCompatApi.HoverEventAction.SHOW_TEXT, new TranslatableComponent("xma.gui.message.xaero_add_waypoint", new Object[0])))
+                            .withColorCompat(ChatFormatting.GOLD));
 
-            TextComponent sendText = new TextComponent("<" + playerName + "> ");
+            CompatComponent sendText = (CompatComponent) new TextComponent("<" + playerName + "> ");
             try {
-                sendText.append(new TextComponent(waypointName).setStyle(Style.EMPTY.withColor(ModSettings.COLORS[Integer.parseInt(args[6])])));
-                sendText.append(" @ ").append(dimensionText).append(" ");
-                TextComponent posText = new TextComponent(String.format("[%d, %d, %d]", Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5])));
+                sendText.appendCompat(new TextComponent(waypointName));
+                sendText.appendCompat(" @ ").appendCompat(dimensionText).appendCompat(" ");
+                CompatComponent posText = (CompatComponent) new TextComponent(String.format("[%d, %d, %d]", Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5])));
                 ModInfo.LOGGER.warn("dimId: {}", dimId);
                 if (dimId == 0) {
-                    posText.withStyle(ChatFormatting.GREEN);
-                    posText.append(" -> ").append(addWaypointText).append(" ")
-                            .append(new TextComponent(String.format("[%d, %d, %d]", Integer.parseInt(args[3]) / 8, Integer.parseInt(args[4]), Integer.parseInt(args[5]) / 8)).withStyle(ChatFormatting.RED));
+                    posText.withStyleCompat(ChatFormatting.GREEN);
+                    posText.appendCompat(" -> ").appendCompat(addWaypointText).appendCompat(" ")
+                            .appendCompat(((CompatComponent) new TextComponent(String.format("[%d, %d, %d]", Integer.parseInt(args[3]) / 8, Integer.parseInt(args[4]), Integer.parseInt(args[5]) / 8))).withStyleCompat(ChatFormatting.RED));
                 } else if (dimId == -1) {
-                    posText.withStyle(ChatFormatting.RED);
-                    posText.append(" -> ").append(addWaypointText).append(" ")
-                            .append(new TextComponent(String.format("[%d, %d, %d]", Integer.parseInt(args[3]) * 8, Integer.parseInt(args[4]), Integer.parseInt(args[5]) * 8)).withStyle(ChatFormatting.GREEN));
+                    posText.withStyleCompat(ChatFormatting.RED);
+                    posText.appendCompat(" -> ").appendCompat(addWaypointText).appendCompat(" ")
+                            .appendCompat(((CompatComponent) new TextComponent(String.format("[%d, %d, %d]", Integer.parseInt(args[3]) * 8, Integer.parseInt(args[4]), Integer.parseInt(args[5]) * 8))).withStyleCompat(ChatFormatting.GREEN));
                 } else if (dimId == 1) {
-                    posText.withStyle(ChatFormatting.LIGHT_PURPLE);
-                    posText.append(" -> ").append(addWaypointText);
+                    posText.withStyleCompat(ChatFormatting.LIGHT_PURPLE);
+                    posText.appendCompat(" -> ").appendCompat(addWaypointText);
                 } else {
-                    posText.append(" -> ").append(addWaypointText);
+                    posText.appendCompat(" -> ").appendCompat(addWaypointText);
                 }
-                sendText.append(posText);
+                sendText.appendCompat(posText);
             } catch (NumberFormatException ignored) {
                 return;
             }
