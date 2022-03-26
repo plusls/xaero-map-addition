@@ -1,6 +1,7 @@
 package com.plusls.xma.compat.mixin;
 
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
+import com.plusls.xma.config.Configs;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,7 +29,10 @@ public abstract class MixinWaypoint extends WaypointMenuElement implements Compa
     @Inject(method = "<init>", at = @At(value = "RETURN"))
     private void addHighlightOption(Object original, int x, int y, int z, String name, String symbol,
                                     int color, int type, boolean editable, String setName, CallbackInfo ci) {
-        rightClickOptions.add(new RightClickOption("xma.gui.xaero_right_click_map_highlight_waypoint", rightClickOptions.size(), this) {
+        if (!Configs.worldMapHighlightWaypoint) {
+            return;
+        }
+        rightClickOptions.add(new RightClickOption("xaero_map_addition.gui.xaero_right_click_map_highlight_waypoint", rightClickOptions.size(), this) {
             public void onAction(Screen screen) {
                 HighlightWaypointUtil.highlightPos = new BlockPos(x, y, z);
                 HighlightWaypointUtil.lastBeamTime = System.currentTimeMillis() + 10000L;

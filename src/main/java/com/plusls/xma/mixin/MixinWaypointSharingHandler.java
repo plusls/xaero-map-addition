@@ -3,6 +3,7 @@ package com.plusls.xma.mixin;
 import com.plusls.xma.ModInfo;
 import com.plusls.xma.compat.chat.CompatComponent;
 import com.plusls.xma.compat.chat.ComponentCompatApi;
+import com.plusls.xma.config.Configs;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.*;
@@ -28,6 +29,9 @@ public abstract class MixinWaypointSharingHandler {
     @SuppressWarnings("ConstantConditions")
     @Inject(method = "onWaypointReceived", at = @At(value = "HEAD"), cancellable = true)
     private void betterOnWaypointReceived(String text, ClientboundChatPacket e, CallbackInfo ci) {
+        if (!Configs.betterWaypointSharingHandler) {
+            return;
+        }
         text = text.replaceAll("§.", "");
         boolean newFormat = text.contains("xaero-waypoint:");
         String sharePrefix = newFormat ? "xaero-waypoint:" : "xaero_waypoint:";
@@ -108,7 +112,7 @@ public abstract class MixinWaypointSharingHandler {
             Component addWaypointText = ((CompatComponent) new TextComponent("[+X]"))
                     .withStyleCompat((Style) ComponentCompatApi.getInstance().getEmptyStyle()
                             .withClickEventCompat(new ClickEvent(ClickEvent.Action.RUN_COMMAND, addCommand))
-                            .withHoverEventCompat(ComponentCompatApi.getInstance().newHoverEvent(ComponentCompatApi.HoverEventAction.SHOW_TEXT, new TranslatableComponent("xma.gui.message.xaero_add_waypoint", new Object[0])))
+                            .withHoverEventCompat(ComponentCompatApi.getInstance().newHoverEvent(ComponentCompatApi.HoverEventAction.SHOW_TEXT, new TranslatableComponent("xaero_map_addition.gui.message.xaero_add_waypoint", new Object[0])))
                             .withColorCompat(ChatFormatting.GOLD));
 
             CompatComponent sendText = (CompatComponent) new TextComponent("<" + playerName + "> ");

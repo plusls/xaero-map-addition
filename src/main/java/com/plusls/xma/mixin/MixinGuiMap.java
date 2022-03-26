@@ -2,6 +2,7 @@ package com.plusls.xma.mixin;
 
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
 import com.plusls.xma.compat.entity.PlayerCompatApi;
+import com.plusls.xma.config.Configs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
@@ -41,6 +42,9 @@ public abstract class MixinGuiMap extends ScreenBase implements IRightClickableE
     @Inject(method = "getRightClickOptions", at = @At(value = "RETURN"))
     private void addHighlightOption(CallbackInfoReturnable<ArrayList<RightClickOption>> cir) {
         final int playerY;
+        if (!Configs.worldMapHighlightWaypoint) {
+            return;
+        }
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             playerY = PlayerCompatApi.getInstance().getBlockPos(player).getY();
@@ -48,7 +52,7 @@ public abstract class MixinGuiMap extends ScreenBase implements IRightClickableE
             playerY = 32767;
         }
         ArrayList<RightClickOption> options = cir.getReturnValue();
-        options.add(new RightClickOption("xma.gui.xaero_right_click_map_highlight_location", options.size(), this) {
+        options.add(new RightClickOption("xaero_map_addition.gui.xaero_right_click_map_highlight_location", options.size(), this) {
             public void onAction(Screen screen) {
                 if (SupportMods.minimap()) {
                     if (WorldMap.settings.waypoints) {

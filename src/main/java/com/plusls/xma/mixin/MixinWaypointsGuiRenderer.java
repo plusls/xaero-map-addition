@@ -3,6 +3,7 @@ package com.plusls.xma.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
 import com.plusls.xma.RenderWaypointUtil;
+import com.plusls.xma.config.Configs;
 import net.minecraft.client.renderer.MultiBufferSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,7 +31,7 @@ public abstract class MixinWaypointsGuiRenderer {
                                        int specW, int specH, double ps, double pc, float partial, double zoom, boolean circle,
                                        float minimapScale, MultiBufferSource.BufferSource renderTypeBuffer, boolean safeMode,
                                        CallbackInfo ci) {
-        if (HighlightWaypointUtil.highlightPos == null) {
+        if (!Configs.minimapHighlightWaypoint || HighlightWaypointUtil.highlightPos == null) {
             return;
         }
         matrixStack.pushPose();

@@ -3,6 +3,7 @@ package com.plusls.xma.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
 import com.plusls.xma.RenderWaypointUtil;
+import com.plusls.xma.config.Configs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,7 +30,7 @@ public class MixinSupportXaeroMinimap {
                                        double guiBasedScale, double scale, double mouseX, double mouseZ,
                                        float brightness, Waypoint oldViewed, Minecraft mc,
                                        CallbackInfoReturnable<Waypoint> cir) {
-        if (HighlightWaypointUtil.highlightPos == null) {
+        if (!Configs.worldMapHighlightWaypoint || HighlightWaypointUtil.highlightPos == null) {
             return;
         }
         matrixStack.pushPose();

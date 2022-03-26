@@ -41,7 +41,7 @@ public class ButtonUtil {
                 var5.printStackTrace();
             }
             Minecraft.getInstance().setScreen(guiWaypoints);
-        }, new TranslatableComponent("xma.gui.title.direct_delete", new Object[0]), new TranslatableComponent("xma.gui.message.direct_delete", new Object[0])));
+        }, new TranslatableComponent("xaero_map_addition.gui.title.direct_delete", new Object[0]), new TranslatableComponent("xaero_map_addition.gui.message.direct_delete", new Object[0])));
     }
 
     public static Button.OnPress getHighlightButtonOnPress(Supplier<ArrayList<Waypoint>> getSelectedWaypointsList) {

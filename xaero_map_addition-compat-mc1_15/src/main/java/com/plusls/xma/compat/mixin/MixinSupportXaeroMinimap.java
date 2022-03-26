@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Transformation;
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
 import com.plusls.xma.RenderWaypointUtil;
+import com.plusls.xma.config.Configs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,7 +27,7 @@ public class MixinSupportXaeroMinimap {
                                        double guiBasedScale, double scale, double mouseX, double mouseZ,
                                        Pattern regex, Pattern regexStartsWith, float brightness, Waypoint oldViewed,
                                        Minecraft mc, CallbackInfoReturnable<Waypoint> cir) {
-        if (HighlightWaypointUtil.highlightPos == null) {
+        if (!Configs.worldMapHighlightWaypoint || HighlightWaypointUtil.highlightPos == null) {
             return;
         }
         RenderSystem.pushMatrix();
