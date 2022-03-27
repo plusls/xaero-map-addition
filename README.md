@@ -5,7 +5,7 @@
 + Oh My Minecraft Client
 + Xaero World Map
 + Xaero Mini Map
-
++ Magiclib https://github.com/Hendrix-Shen/MagicLib
 ## Features
 
 
