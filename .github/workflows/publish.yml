@@ -37,6 +37,8 @@ jobs:
           curseforge-id: 566242
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
 
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
           files-primary: build/libs/!(*-@(dev|sources)).jar
           files-secondary: ''
 
