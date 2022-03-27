@@ -9,12 +9,11 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(Screen.class)
 public abstract class MixinScreen implements CompatScreen {
 
-    // 不知道为什么，如果不加前缀会自动帮我mapping，然而这里不存在mapping
     @Shadow
-    protected abstract <T extends AbstractWidget> T shadow$addButton(T abstractWidget);
+    protected abstract AbstractWidget addButton(AbstractWidget abstractWidget);
 
     @Override
-    public <T extends AbstractWidget> T addAbstractWidget(T abstractWidget) {
-        return shadow$addButton(abstractWidget);
+    public AbstractWidget addAbstractWidget(AbstractWidget abstractWidget) {
+        return addButton(abstractWidget);
     }
 }
