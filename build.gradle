@@ -47,6 +47,17 @@ allprojects {
     apply plugin: "maven-publish"
     apply plugin: "fabric-loom"
 
+    // BUG: remapperIsolation not work with LegacyMixinAp
+    loom {
+        mixin {
+            useLegacyMixinAp = false
+        }
+    }
+
+    remapJar {
+        remapperIsolation = true
+    }
+
     loom.runConfigs.configureEach {
         property("mixin.debug.export", "true")
     }
