@@ -27,10 +27,11 @@ public abstract class MixinWaypoint extends WaypointMenuElement implements Compa
     private ArrayList<RightClickOption> rightClickOptions;
 
 
+    @SuppressWarnings("DuplicatedCode")
     @Inject(method = "<init>", at = @At(value = "RETURN"))
     private void addHighlightOption(Object original, int x, int y, int z, String name, String symbol, int color, int type,
                                     boolean editable, String setName, boolean yIncluded, CallbackInfo ci) {
-        if (Configs.worldMapHighlightWaypoint) {
+        if (!Configs.worldMapHighlightWaypoint) {
             return;
         }
         rightClickOptions.add(new RightClickOption("xaero_map_addition.gui.xaero_right_click_map_highlight_waypoint", rightClickOptions.size(), this) {

@@ -15,6 +15,7 @@ if (project.pre_release != "") {
 setVersion(real_version)
 setGroup(project.maven_group)
 
+var currentProject = project
 
 dependencies {
     minecraft("com.mojang:minecraft:${project.minecraft_version}")
@@ -62,8 +63,8 @@ allprojects {
         property("mixin.debug.export", "true")
     }
 
-    version = rootProject.version
-    group = rootProject.group
+    version = currentProject.version
+    group = currentProject.group
 
     repositories {
         maven {
@@ -80,10 +81,10 @@ allprojects {
 
     dependencies {
         mappings(loom.officialMojangMappings())
-        modImplementation("net.fabricmc:fabric-loader:${rootProject.loader_version}")
-        modCompileOnly("top.hendrixshen.magiclib:magiclib:${project.magiclib_version}")
+        modImplementation("net.fabricmc:fabric-loader:${currentProject.loader_version}")
+        modCompileOnly("top.hendrixshen.magiclib:magiclib:${currentProject.magiclib_version}")
 
-        modRuntimeOnly("curse.maven:lazydfu-433518:${rootProject.lazydfu_version}")
+        modRuntimeOnly("curse.maven:lazydfu-433518:${currentProject.lazydfu_version}")
         //modRuntimeOnly("curse.maven:imblockerfabric-399225:${rootProject.imblockerfabric}")
     }
 
@@ -107,9 +108,9 @@ allprojects {
 
 
     processResources {
-        inputs.property("version", rootProject.version)
+        inputs.property("version", currentProject.version)
         filesMatching("fabric.mod.json") {
-            expand(["version": rootProject.version])
+            expand(["version": currentProject.version])
         }
     }
 }
@@ -117,11 +118,11 @@ allprojects {
 subprojects {
     if (project.gradle.startParameter.taskNames.size() == 1 && project.gradle.startParameter.taskNames.get(0) == "runClient") {
         dependencies {
-            modImplementation(rootProject)
+            modImplementation(currentProject)
         }
     } else {
         dependencies {
-            implementation(rootProject)
+            implementation(currentProject)
         }
     }
 }

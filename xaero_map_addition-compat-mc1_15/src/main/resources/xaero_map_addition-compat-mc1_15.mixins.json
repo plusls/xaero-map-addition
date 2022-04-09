@@ -10,12 +10,8 @@
     "MixinSupportXaeroMinimap",
     "MixinWaypoint",
     "MixinWaypointsGuiRenderer",
-    "compat.chat.MixinStyle",
-    "compat.chat.MixinTextComponent",
-    "compat.chat.MixinTranslatableComponent",
-    "compat.dev.mojang.MixinEntityIconPrerenderer",
-    "compat.dev.mojang.MixinMapProcessor",
-    "compat.screen.MixinScreen"
+    "dev.mojang.MixinEntityIconPrerenderer",
+    "dev.mojang.MixinMapProcessor"
   ],
   "injectors": {
     "defaultRequire": 1

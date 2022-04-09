@@ -29,6 +29,6 @@
     "fabricloader": ">=0.11.3",
     "minecraft": "*",
     "ommc": "*",
-    "magiclib": ">=0.3.23"
+    "magiclib": ">=0.4.7"
   }
 }

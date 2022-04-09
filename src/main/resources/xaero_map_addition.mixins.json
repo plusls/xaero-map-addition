@@ -3,7 +3,6 @@
   "minVersion": "0.8",
   "package": "com.plusls.xma.mixin",
   "compatibilityLevel": "JAVA_8",
-  "plugin": "top.hendrixshen.magiclib.dependency.mixin.MagicMixinPlugin",
   "client": [
     "AccessorClientboundChatPacket",
     "MixinGuiMap",

@@ -1,4 +1,4 @@
-package com.plusls.xma.compat.mixin.compat.dev.mojang;
+package com.plusls.xma.compat.mixin.dev.mojang;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
