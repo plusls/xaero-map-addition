@@ -14,12 +14,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.hendrixshen.magiclib.dependency.annotation.Dependencies;
 import top.hendrixshen.magiclib.dependency.annotation.Dependency;
-import xaero.map.WorldMap;
 import xaero.map.gui.GuiMap;
 import xaero.map.gui.IRightClickableElement;
 import xaero.map.gui.RightClickOption;
 import xaero.map.gui.ScreenBase;
-import xaero.map.mods.SupportMods;
 
 import java.util.ArrayList;
 
@@ -53,14 +51,10 @@ public abstract class MixinGuiMap extends ScreenBase implements IRightClickableE
         ArrayList<RightClickOption> options = cir.getReturnValue();
         options.add(new RightClickOption("xaero_map_addition.gui.xaero_right_click_map_highlight_location", options.size(), this) {
             public void onAction(Screen screen) {
-                if (SupportMods.minimap()) {
-                    if (WorldMap.settings.waypoints) {
-                        HighlightWaypointUtil.highlightPos = new BlockPos(MixinGuiMap.this.rightClickX,
-                                MixinGuiMap.this.rightClickY == 32767 ? playerY : MixinGuiMap.this.rightClickY + 1,
-                                MixinGuiMap.this.rightClickZ);
-                        HighlightWaypointUtil.lastBeamTime = System.currentTimeMillis() + 10000L;
-                    }
-                }
+                HighlightWaypointUtil.highlightPos = new BlockPos(MixinGuiMap.this.rightClickX,
+                        MixinGuiMap.this.rightClickY == 32767 ? playerY : MixinGuiMap.this.rightClickY + 1,
+                        MixinGuiMap.this.rightClickZ);
+                HighlightWaypointUtil.lastBeamTime = System.currentTimeMillis() + 10000L;
             }
         });
     }
