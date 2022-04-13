@@ -1,6 +1,7 @@
 package com.plusls.xma.compat.mixin;
 
 import com.plusls.xma.ButtonUtil;
+import com.plusls.xma.ModInfo;
 import com.plusls.xma.config.Configs;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -52,7 +53,7 @@ public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownC
     private void initXMAButtons(CallbackInfo ci) {
         if (Configs.directDeleteButton) {
             this.directDeleteButton = new MyTinyButton(this.width / 2 + 212, this.height - 53,
-                    I18n.get("xaero_map_addition.gui.button.direct_delete"),
+                    I18n.get(ModInfo.MOD_ID + ".gui.button.direct_delete"),
                     ButtonUtil.getDirectDeleteButtonOnPress(this,
                             this.displayedWorld, this.selectedListSet, this::getSelectedWaypointsList,
                             this::updateSortedList, this.modMain
@@ -62,7 +63,7 @@ public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownC
 
         if (Configs.minimapHighlightWaypoint) {
             this.highlightButton = new MyTinyButton(this.width / 2 - 286, this.height - 53,
-                    I18n.get("xaero_map_addition.gui.button.highlight_waypoint"),
+                    I18n.get(ModInfo.MOD_ID + ".gui.button.highlight_waypoint"),
                     ButtonUtil.getHighlightButtonOnPress(this::getSelectedWaypointsList));
             this.addButton(this.highlightButton);
         }

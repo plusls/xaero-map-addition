@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "${mod_id}-compat-mc1_16",
+  "id": "${mod_id}-core",
   "version": "${mod_version}",
-  "name": "${mod_name} Compat",
-  "description": "${mod_name} compat for Minecraft 1.16.x",
+  "name": "${mod_name} Core",
+  "description": "${mod_name} Core code",
   "authors": [
     "plusls"
   ],
@@ -13,19 +13,16 @@
     "sources": "${mod_sources}"
   },
   "license": "${mod_license}",
-  "icon": "assets/${mod_id}-compat-mc1_16/icon.png",
+  "icon": "assets/${mod_id}-core/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.plusls.xma.compat.XaeroMapAdditionCompat"
+      "com.plusls.xma.XaeroMapAddition"
     ]
   },
   "mixins": [
-    "${mod_id}-compat-mc1_16.mixins.json"
+    "${mod_id}-core.mixins.json"
   ],
-  "depends": {
-    "minecraft": "1.16.x"
-  },
   "custom": {
     "modmenu:api": true,
     "modmenu:parent": "${mod_id}",

@@ -1,18 +1,19 @@
 {
   "schemaVersion": 1,
-  "id": "xaero_map_addition-compat-mc1_18",
-  "version": "${version}",
-  "name": "Xaero Map Addition Compat",
-  "description": "Xaero Map Addition compat for Minecraft 1.18.x",
+  "id": "${mod_id}-compat-mc1_18",
+  "version": "${mod_version}",
+  "name": "${mod_name} Compat",
+  "description": "${mod_name} compat for Minecraft 1.18.x",
   "authors": [
     "plusls"
   ],
   "contact": {
-    "homepage": "https://blog.plusls.com/",
-    "sources": "https://github.com/plusls/xaero-map-addition"
+    "homepage": "${mod_homepage}",
+    "issues": "${mod_sources}/issues",
+    "sources": "${mod_sources}"
   },
-  "license": "MPL-2.0",
-  "icon": "assets/xaero_map_addition-compat-mc1_18/icon.png",
+  "license": "${mod_license}",
+  "icon": "assets/${mod_id}-compat-mc1_18/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
@@ -20,21 +21,20 @@
     ]
   },
   "mixins": [
-    "xaero_map_addition-compat-mc1_18.mixins.json"
+    "${mod_id}-compat-mc1_18.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.11.3",
     "minecraft": "1.18.x"
   },
   "custom": {
     "modmenu:api": true,
-    "modmenu:parent": "xaero_map_addition",
+    "modmenu:parent": "${mod_id}",
     "modmenu:clientsideOnly": true,
     "modmenu": {
       "badges": [
         "library"
       ],
-      "parent": "xaero_map_addition"
+      "parent": "${mod_id}"
     }
   }
 }

@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Optional;
 
 public class ModInfo {
-    public static String MOD_ID = "xaero_map_addition";
+    public static String MOD_ID = "xaero_map_addition-core";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static String MOD_VERSION;
 

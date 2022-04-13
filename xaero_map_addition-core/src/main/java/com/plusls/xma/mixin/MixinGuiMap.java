@@ -1,6 +1,7 @@
 package com.plusls.xma.mixin;
 
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointUtil;
+import com.plusls.xma.ModInfo;
 import com.plusls.xma.config.Configs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -49,7 +50,8 @@ public abstract class MixinGuiMap extends ScreenBase implements IRightClickableE
             playerY = 32767;
         }
         ArrayList<RightClickOption> options = cir.getReturnValue();
-        options.add(new RightClickOption("xaero_map_addition.gui.xaero_right_click_map_highlight_location", options.size(), this) {
+        options.add(new RightClickOption(ModInfo.MOD_ID + ".gui.xaero_right_click_map_highlight_location",
+                options.size(), this) {
             public void onAction(Screen screen) {
                 HighlightWaypointUtil.highlightPos = new BlockPos(MixinGuiMap.this.rightClickX,
                         MixinGuiMap.this.rightClickY == 32767 ? playerY : MixinGuiMap.this.rightClickY + 1,

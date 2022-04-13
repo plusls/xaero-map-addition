@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom").version("0.12-SNAPSHOT")
+    id 'java-library'
     id("maven-publish")
     id("org.ajoberstar.grgit").version("4.1.0")
     id("com.modrinth.minotaur").version("1.2.1")
@@ -12,52 +12,39 @@ if (project.pre_release != "") {
     real_version += grgit.head().abbreviatedId
 }
 
-setVersion(real_version)
-setGroup(project.maven_group)
+version = real_version
+group = project.group
 
 var currentProject = project
 
-dependencies {
-    minecraft("com.mojang:minecraft:${project.minecraft_version}")
-
-    modCompileOnly("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
-    modCompileOnly("curse.maven:malilib-303119:${project.malilib_version}")
-    modCompileOnly("curse.maven:xaeros-world-map-317780:${project.xaero_world_map_version}")
-    modCompileOnly("curse.maven:xaeros-minimap-263420:${project.xaero_minimap_version}")
-    modCompileOnly("curse.maven:ommc-454900:${project.ommc_version}")
-
-    if (project.gradle.startParameter.projectDir != null &&
-            !project.gradle.startParameter.projectDir.getName().startsWith("xaero_map_addition-compat")) {
-        modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
-        modRuntimeOnly("curse.maven:modmenu-308702:${project.modmenu_version}")
-        modRuntimeOnly("curse.maven:malilib-303119:${project.malilib_version}")
-        modRuntimeOnly("curse.maven:xaeros-world-map-317780:${project.xaero_world_map_version}")
-        modRuntimeOnly("curse.maven:xaeros-minimap-263420:${project.xaero_minimap_version}")
-        modRuntimeOnly("curse.maven:ommc-454900:${project.ommc_version}")
-        modRuntimeOnly("curse.maven:imblockerfabric-399225:${project.imblockerfabric}")
-        runtimeOnly(fileTree(dir: "xaero_map_addition-compat-mc1_18/build/devlibs", include: ["*-dev.jar"]))
-    }
-
-    subprojects.each {
-        include project("${it.name}:")
-    }
-
-}
-
 allprojects {
     apply plugin: "maven-publish"
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = "UTF-8"
+        it.sourceCompatibility = JavaVersion.VERSION_1_8
+        it.targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    java {
+        withSourcesJar()
+    }
+}
+
+static String getMagiclibCompatName(String minecraftVersion) {
+    String ret = minecraftVersion.replace(".", "_")
+    int idx = ret.lastIndexOf("_")
+    if (idx == -1) {
+        return ""
+    }
+    if (idx != 1) {
+        ret = ret.substring(0, idx)
+    }
+    return ret
+}
+
+subprojects {
     apply plugin: "fabric-loom"
-
-    // BUG: remapperIsolation not work with LegacyMixinAp
-    loom {
-        mixin {
-            useLegacyMixinAp = false
-        }
-    }
-
-    remapJar {
-        remapperIsolation = true
-    }
 
     loom.runConfigs.configureEach {
         property("mixin.debug.export", "true")
@@ -65,6 +52,7 @@ allprojects {
 
     version = currentProject.version
     group = currentProject.group
+
 
     repositories {
         maven {
@@ -77,15 +65,49 @@ allprojects {
             url 'https://maven.hendrixshen.top'
         }
         mavenCentral()
+        mavenLocal()
     }
 
     dependencies {
+        minecraft("com.mojang:minecraft:${project.minecraft_version}")
         mappings(loom.officialMojangMappings())
-        modImplementation("net.fabricmc:fabric-loader:${currentProject.loader_version}")
-        modCompileOnly("top.hendrixshen.magiclib:magiclib:${currentProject.magiclib_version}")
 
-        modRuntimeOnly("curse.maven:lazydfu-433518:${currentProject.lazydfu_version}")
-        //modRuntimeOnly("curse.maven:imblockerfabric-399225:${rootProject.imblockerfabric}")
+        modImplementation("curse.maven:xaeros-world-map-317780:${project.xaero_world_map_version}")
+        modImplementation("curse.maven:xaeros-minimap-263420:${project.xaero_minimap_version}")
+        modImplementation("curse.maven:ommc-454900:${project.ommc_version}")
+
+        modImplementation("top.hendrixshen:magiclib-compat-mc${currentProject.getMagiclibCompatName(project.minecraft_version)}:${project.magiclib_version}")
+
+
+        if (project.name != (String) "${currentProject.mod_id}-core") {
+            if (project.gradle.startParameter.taskNames.size() == 1 &&
+                    project.gradle.startParameter.taskNames.get(0) == "runClient") {
+                modImplementation(project(path: ":${currentProject.mod_id}-core")) {
+                    transitive = false
+                }
+            } else {
+                implementation(project(path: ":${currentProject.mod_id}-core")) {
+                    transitive = false
+                }
+            }
+        } else {
+            //runtimeOnly(fileTree([dir: "../magiclib-compat-mc1_18/build/devlibs", include: ["magiclib-compat-mc1_18-${project.version}-dev.jar"]]))
+            //runtimeOnly(fileTree(dir: "xaero_map_addition-compat-mc1_18/build/devlibs", include: ["*-dev.jar"]))
+        }
+        runtimeOnly(currentProject) {
+            transitive = false
+        }
+    }
+    processResources {
+        inputs.property("version", currentProject.version)
+        filesMatching("fabric.mod.json") {
+            expand(["mod_version" : currentProject.version,
+                    "mod_id"      : currentProject.mod_id,
+                    "mod_name"    : currentProject.mod_name,
+                    "mod_homepage": currentProject.mod_homepage,
+                    "mod_sources" : currentProject.mod_sources,
+                    "mod_license" : currentProject.mod_license
+            ])        }
     }
 
     runClient {
@@ -95,57 +117,82 @@ allprojects {
     runServer {
         defaultCharacterEncoding = "UTF-8"
     }
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from(components.java)
+            }
+        }
 
-    java {
-        withSourcesJar()
-    }
-
-    tasks.withType(JavaCompile).configureEach {
-        it.options.encoding = "UTF-8"
-        it.sourceCompatibility = JavaVersion.VERSION_1_8
-        it.targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-
-    processResources {
-        inputs.property("version", currentProject.version)
-        filesMatching("fabric.mod.json") {
-            expand(["version": currentProject.version])
+        repositories {
+            mavenLocal()
+            maven {
+                url "${rootDir}/publish"
+            }
         }
     }
+
 }
 
-subprojects {
-    if (project.gradle.startParameter.taskNames.size() == 1 && project.gradle.startParameter.taskNames.get(0) == "runClient") {
-        dependencies {
-            modImplementation(currentProject)
-        }
-    } else {
-        dependencies {
-            implementation(currentProject)
-        }
+
+import com.modrinth.minotaur.TaskModrinthUpload
+import groovy.json.JsonBuilder
+
+processResources {
+    inputs.property "version", currentProject.version
+    if (project.gradle.startParameter.taskNames.size() >= 1 &&
+            project.gradle.startParameter.taskNames.get(0) != "runClient") {
+        var jars = []
+        subprojects.each({
+            jars.add(["file": "META-INF/jars/${it.name}-${it.version}.jar"])
+        })
+        filesMatching(("fabric.mod.json"), {
+            include("fabric.mod.json")
+            expand(["mod_version" : currentProject.version,
+                    "sub_jars"    : new JsonBuilder(jars).toPrettyString(),
+                    "mod_id"      : currentProject.mod_id,
+                    "mod_name"    : currentProject.mod_name,
+                    "mod_homepage": currentProject.mod_homepage,
+                    "mod_sources" : currentProject.mod_sources,
+                    "mod_license" : currentProject.mod_license
+            ])
+        })
     }
 }
 
 
 jar {
-    from("LICENSE") {
-        rename({ return "${it}_${project.archives_base_name}" })
+    dependsOn(subprojects.collect {
+        it.tasks.remapJar
+    })
+
+    doFirst {
+        copy {
+            from {
+                subprojects.collect {
+                    it.remapJar.outputs.files
+                }
+            }
+            into("build/tmp/submods/META-INF/jars")
+        }
     }
+
+    from("LICENSE")
+
+    from("build/tmp/submods")
 }
 
-import com.modrinth.minotaur.TaskModrinthUpload
-
-task publishModrinth(type: TaskModrinthUpload) {
-    onlyIf {
-        System.getenv("MODRINTH") // Only attempt to run this task if the MODRINTH variable is set, otherwise SKIP it
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from(components.java)
+        }
     }
-    token = System.getenv("MODRINTH")
-    changelog = System.getenv("CHANGELOG")
-    projectId = "CTIW5eos"
-    versionNumber = "${project.mod_version}-${project.minecraft_version}"
-    // On fabric, use "remapJar" instead of "jar"
-    uploadFile = remapJar
-    addGameVersion(project.minecraft_version as String)
-    addLoader("fabric")
+
+    repositories {
+        mavenLocal()
+        maven {
+            url "${rootDir}/publish"
+        }
+    }
 }
