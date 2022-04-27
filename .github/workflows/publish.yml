@@ -26,7 +26,9 @@ jobs:
         if: ${{ runner.os != 'Windows' }}
         run: chmod +x ./gradlew
       - name: build
-        run: ./gradlew build
+        run: |
+          ./gradlew preprocessResources
+          ./gradlew build
       - name: Publish Minecraft Mods
         uses: Kir-Antipov/mc-publish@v2.1
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }}
@@ -39,7 +41,7 @@ jobs:
 
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-          files-primary: build/libs/!(*-@(dev|sources)).jar
+          files-primary: fabricWrapper/build/libs/!(*-@(dev|sources)).jar
           files-secondary: ''
 
           version-type: release
