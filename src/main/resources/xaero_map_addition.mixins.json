@@ -9,7 +9,6 @@
     "MixinGuiMap",
     "MixinGuiWaypoints",
     "MixinGuiWaypoints_List",
-    "MixinSupportXaeroMinimap",
     "MixinWaypoint",
     "MixinWaypointsGuiRenderer",
     "MixinWaypointSharingHandler"

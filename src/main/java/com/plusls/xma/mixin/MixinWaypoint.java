@@ -14,13 +14,16 @@ import top.hendrixshen.magiclib.dependency.annotation.Dependency;
 import xaero.map.gui.IRightClickableElement;
 import xaero.map.gui.RightClickOption;
 import xaero.map.mods.gui.Waypoint;
-import xaero.map.mods.gui.WaypointMenuElement;
+
+//#if MC > 11502
+import xaero.map.mods.gui.WaypointRenderer;
+//#endif
 
 import java.util.ArrayList;
 
 @Dependencies(and = @Dependency("xaeroworldmap"))
 @Mixin(value = Waypoint.class, remap = false)
-public abstract class MixinWaypoint extends WaypointMenuElement implements Comparable<Waypoint>, IRightClickableElement {
+public abstract class MixinWaypoint {
 
     @Shadow
     private ArrayList<RightClickOption> rightClickOptions;
@@ -28,16 +31,20 @@ public abstract class MixinWaypoint extends WaypointMenuElement implements Compa
 
     @SuppressWarnings("DuplicatedCode")
     @Inject(method = "<init>", at = @At(value = "RETURN"))
-    private void addHighlightOption(Object original, int x, int y, int z, String name, String symbol, int color, int type,
-                                    boolean editable, String setName,
-                                    //#if MC > 11502
-                                    boolean yIncluded,
-                                    //#endif
-                                    CallbackInfo ci) {
+    private void addHighlightOption(
+            //#if MC > 11502
+            WaypointRenderer renderer,
+            //#endif
+            Object original, int x, int y, int z, String name, String symbol, int color, int type,
+            boolean editable, String setName,
+            //#if MC > 11502
+            boolean yIncluded, double dimDiv,
+            //#endif
+            CallbackInfo ci) {
         if (!Configs.worldMapHighlightWaypoint) {
             return;
         }
-        rightClickOptions.add(new RightClickOption("xaero_map_addition.gui.xaero_right_click_map_highlight_waypoint", rightClickOptions.size(), this) {
+        rightClickOptions.add(new RightClickOption("xaero_map_addition.gui.xaero_right_click_map_highlight_waypoint", rightClickOptions.size(), (IRightClickableElement) this) {
             public void onAction(Screen screen) {
                 HighlightWaypointUtil.highlightPos = new BlockPos(x, y, z);
                 HighlightWaypointUtil.lastBeamTime = System.currentTimeMillis() + 10000L;

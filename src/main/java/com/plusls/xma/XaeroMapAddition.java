@@ -12,9 +12,9 @@ public class XaeroMapAddition implements ClientModInitializer {
 
     @Dependencies(and = {
             //#if MC > 11502
-            @Dependency(value = "xaerominimap", versionPredicate = ">=22.3.1.1", optional = true),
-            @Dependency(value = "xaerobetterpvp", versionPredicate = ">=22.3.1.1", optional = true),
-            @Dependency(value = "xaeroworldmap", versionPredicate = ">=1.20.4.1", optional = true)
+            @Dependency(value = "xaerominimap", versionPredicate = ">=22.7.0", optional = true),
+            @Dependency(value = "xaerobetterpvp", versionPredicate = ">=22.7.0", optional = true),
+            @Dependency(value = "xaeroworldmap", versionPredicate = ">=1.21.0", optional = true)
             //#elseif MC > 11605
             //$$ @Dependency(value = "xaerominimap", versionPredicate = ">=21.10.0.4", optional = true),
             //$$ @Dependency(value = "xaerobetterpvp", versionPredicate = ">=21.10.0.4", optional = true),
