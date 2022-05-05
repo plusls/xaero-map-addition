@@ -25,6 +25,9 @@
       "com.plusls.xma.compat.modmenu.WrapperModMenuApiImpl"
     ]
   },
+  "depends": {
+    "magiclib": ">=0.5.5"
+  },
   "custom": {
     "modmenu:clientsideOnly": true
   },
