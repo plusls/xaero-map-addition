@@ -3,6 +3,7 @@ package com.plusls.xma;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Matrix4f;
 import com.plusls.ommc.feature.highlithtWaypoint.HighlightWaypointResourceLoader;
@@ -53,5 +54,40 @@ public class RenderWaypointUtil {
         bufferBuilder.vertex(matrix4f, xWidth, -yWidth, 0.0f).uv(icon.getU1(), icon.getV0()).color(iconR, iconG, iconB, fade).endVertex();
 
         Tesselator.getInstance().end();
+    }
+
+    // From WaypointsGuiRenderer.translatePosition
+    public static void translatePositionCompat(PoseStack matrixStack, int specW, int specH, double ps,
+                                               double pc, double offx, double offy, double zoom, boolean circle) {
+        double Y = (pc * offx + ps * offy) * zoom;
+        double X = (ps * offx - pc * offy) * zoom;
+        double borderedX = X;
+        double borderedY = Y;
+        if (!circle) {
+            if (X > (double) specW) {
+                borderedX = specW;
+                borderedY = Y * (double) specW / X;
+            } else if (X < (double) (-specW)) {
+                borderedX = (-specW);
+                borderedY = -Y * (double) specW / X;
+            }
+
+            if (borderedY > (double) specH) {
+                borderedY = specH;
+                borderedX = X * (double) specH / Y;
+            } else if (borderedY < (double) (-specH)) {
+                borderedY = (-specH);
+                borderedX = -X * (double) specH / Y;
+            }
+        } else {
+            double distSquared = X * X + Y * Y;
+            double maxDistSquared = (specW * specW);
+            if (distSquared > maxDistSquared) {
+                double scaleDown = Math.sqrt(maxDistSquared / distSquared);
+                borderedX = X * scaleDown;
+                borderedY = Y * scaleDown;
+            }
+        }
+        matrixStack.translate((double) (Math.round(borderedX) - 1L), (double) (Math.round(borderedY) - 1L), 0.0);
     }
 }

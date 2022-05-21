@@ -9,7 +9,9 @@
     "MixinGuiMap",
     "MixinGuiWaypoints",
     "MixinGuiWaypoints_List",
+    "MixinMinimapElementOverMapRendererHandler",
     "MixinWaypoint",
+    "MixinWaypointReader",
     "MixinWaypointsGuiRenderer",
     "MixinWaypointSharingHandler"
   ],
