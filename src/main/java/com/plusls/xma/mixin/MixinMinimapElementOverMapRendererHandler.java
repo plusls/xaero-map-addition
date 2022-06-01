@@ -39,8 +39,8 @@ public class MixinMinimapElementOverMapRendererHandler {
                             double renderZ, double ps, double pc, double zoom, boolean cave, float partialTicks,
                             RenderTarget framebuffer, AXaeroMinimap modMain, MinimapRendererHelper helper,
                             MultiBufferSource.BufferSource renderTypeBuffers, Font font,
-                            MultiTextureRenderTypeRendererProvider multiTextureRenderTypeRenderers,
-                            int specW, int specH, boolean circle, float minimapScale, CallbackInfo ci) {
+                            MultiTextureRenderTypeRendererProvider multiTextureRenderTypeRenderers, int specW, int specH,
+                            int halfViewW, int halfViewH, boolean circle, float minimapScale, CallbackInfo ci) {
         if (!Configs.minimapHighlightWaypoint || HighlightWaypointUtil.highlightPos == null) {
             return;
         }
