@@ -2,11 +2,19 @@ package com.plusls.xma;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
 import org.jetbrains.annotations.Nullable;
+import top.hendrixshen.magiclib.compat.minecraft.network.chat.ComponentCompatApi;
 import top.hendrixshen.magiclib.compat.minecraft.network.chat.StyleCompatApi;
 import xaero.common.minimap.waypoints.Waypoint;
 
+//#if MC > 11502
+import net.minecraft.network.chat.MutableComponent;
+//#else
+//$$ import net.minecraft.network.chat.BaseComponent;
+//#endif
 public class ShareWaypointUtil {
     @Nullable
     public static Component getBetterShareText(String text, String[] args) {
@@ -30,29 +38,30 @@ public class ShareWaypointUtil {
                     String dimensionName = args[9].substring(9, args[9].lastIndexOf("_")).replace("^col^", ":");
                     if (dimensionName.startsWith("dim%")) {
                         if (dimensionName.length() == 4) {
-                            dimensionName = I18n.get("gui.xaero_waypoint_unknown_dimension");
-                            dimensionText = new TextComponent(dimensionName);
+                            dimensionText = ComponentCompatApi.translatable("gui.xaero_waypoint_unknown_dimension");
                         } else {
                             String dimIdPart = dimensionName.substring(4);
                             ModInfo.LOGGER.warn("dimIdPart: {}", dimIdPart);
                             switch (dimIdPart) {
                                 case "0":
                                     dimId = 0;
+                                    dimensionText = ComponentCompatApi.literal("overworld");
                                     break;
                                 case "1":
                                     dimId = 1;
+                                    dimensionText = ComponentCompatApi.literal("the_end");
                                     break;
                                 case "-1":
                                     dimId = -1;
+                                    dimensionText = ComponentCompatApi.literal("the_nether");
                                     break;
                                 default:
-                                    dimensionName = I18n.get("gui.xaero_waypoint_unknown_dimension");
-                                    dimensionText = new TextComponent(dimensionName);
+                                    dimensionText = ComponentCompatApi.translatable("gui.xaero_waypoint_unknown_dimension");
                                     break;
                             }
                         }
                     } else {
-                        dimensionText = new TextComponent(dimensionName);
+                        dimensionText = ComponentCompatApi.literal(dimensionName);
                         switch (dimensionName) {
                             case "overworld":
                                 dimId = 0;
@@ -68,13 +77,16 @@ public class ShareWaypointUtil {
                 } catch (IndexOutOfBoundsException ignored) {
                     return null;
                 }
+            } else {
+                dimensionText = ComponentCompatApi.translatable("gui.xaero_waypoint_unknown_dimension");
             }
+
             if (dimId == 0) {
-                dimensionText = new TranslatableComponent("createWorld.customize.preset.overworld").withStyle(ChatFormatting.DARK_GREEN);
+                dimensionText = ComponentCompatApi.translatable("createWorld.customize.preset.overworld").withStyle(ChatFormatting.DARK_GREEN);
             } else if (dimId == 1) {
-                dimensionText = new TranslatableComponent("advancements.end.root.title").withStyle(ChatFormatting.DARK_PURPLE);
+                dimensionText = ComponentCompatApi.translatable("advancements.end.root.title").withStyle(ChatFormatting.DARK_PURPLE);
             } else if (dimId == -1) {
-                dimensionText = new TranslatableComponent("advancements.nether.root.title").withStyle(ChatFormatting.DARK_RED);
+                dimensionText = ComponentCompatApi.translatable("advancements.nether.root.title").withStyle(ChatFormatting.DARK_RED);
             }
 
             StringBuilder addCommandBuilder = new StringBuilder();
@@ -86,27 +98,37 @@ public class ShareWaypointUtil {
             }
 
             String addCommand = addCommandBuilder.toString();
-            Component addWaypointText = new TextComponent("[+X]")
+            Component addWaypointText = ComponentCompatApi.literal("[+X]")
                     .withStyle((StyleCompatApi.empty()
                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, addCommand))
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent(ModInfo.MOD_ID + ".gui.message.xaero_add_waypoint")))
+                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentCompatApi.translatable(ModInfo.MOD_ID + ".gui.message.xaero_add_waypoint")))
                             .withColor(ChatFormatting.GOLD)));
 
 
-            TextComponent sendText = new TextComponent("<" + playerName + "> ");
+            //#if MC > 11502
+            MutableComponent
+            //#else
+            //$$ BaseComponent
+            //#endif
+                    sendText = ComponentCompatApi.literal("<" + playerName + "> ");
             try {
-                sendText.append(new TextComponent(waypointName));
+                sendText.append(ComponentCompatApi.literal(waypointName));
                 sendText.append(" @ ").append(dimensionText).append(" ");
-                TextComponent posText = new TextComponent(String.format("[%d, %d, %d]", Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5])));
+                //#if MC > 11502
+                MutableComponent
+                //#else
+                //$$ BaseComponent
+                //#endif
+                        posText = ComponentCompatApi.literal(String.format("[%d, %d, %d]", Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5])));
                 ModInfo.LOGGER.warn("dimId: {}", dimId);
                 if (dimId == 0) {
                     posText.withStyle(ChatFormatting.GREEN);
                     posText.append(" -> ").append(addWaypointText).append(" ")
-                            .append(new TextComponent(String.format("[%d, %d, %d]", Integer.parseInt(args[3]) / 8, Integer.parseInt(args[4]), Integer.parseInt(args[5]) / 8)).withStyle(ChatFormatting.RED));
+                            .append(ComponentCompatApi.literal(String.format("[%d, %d, %d]", Integer.parseInt(args[3]) / 8, Integer.parseInt(args[4]), Integer.parseInt(args[5]) / 8)).withStyle(ChatFormatting.RED));
                 } else if (dimId == -1) {
                     posText.withStyle(ChatFormatting.RED);
                     posText.append(" -> ").append(addWaypointText).append(" ")
-                            .append(new TextComponent(String.format("[%d, %d, %d]", Integer.parseInt(args[3]) * 8, Integer.parseInt(args[4]), Integer.parseInt(args[5]) * 8)).withStyle(ChatFormatting.GREEN));
+                            .append(ComponentCompatApi.literal(String.format("[%d, %d, %d]", Integer.parseInt(args[3]) * 8, Integer.parseInt(args[4]), Integer.parseInt(args[5]) * 8)).withStyle(ChatFormatting.GREEN));
                 } else if (dimId == 1) {
                     posText.withStyle(ChatFormatting.LIGHT_PURPLE);
                     posText.append(" -> ").append(addWaypointText);

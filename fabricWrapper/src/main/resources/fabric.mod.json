@@ -26,7 +26,7 @@
     ]
   },
   "depends": {
-    "magiclib": ">=0.5.5"
+    "magiclib": ">=${magiclib_version}"
   },
   "custom": {
     "modmenu:clientsideOnly": true

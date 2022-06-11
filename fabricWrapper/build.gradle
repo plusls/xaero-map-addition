@@ -55,6 +55,7 @@ processResources {
                 "mod_homepage": project.mod_homepage,
                 "mod_sources" : project.mod_sources,
                 "mod_license" : project.mod_license,
+                "magiclib_version": project.magiclib_version,
                 "sub_jars"    : new JsonBuilder(jars).toPrettyString(),
         ])
     }

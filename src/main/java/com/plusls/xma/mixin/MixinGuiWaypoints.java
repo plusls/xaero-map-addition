@@ -6,12 +6,12 @@ import com.plusls.xma.config.Configs;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import top.hendrixshen.magiclib.compat.minecraft.network.chat.ComponentCompatApi;
 import top.hendrixshen.magiclib.dependency.annotation.Dependencies;
 import top.hendrixshen.magiclib.dependency.annotation.Dependency;
 import xaero.common.AXaeroMinimap;
@@ -53,7 +53,7 @@ public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownC
         if (Configs.directDeleteButton) {
             this.directDeleteButton = new MyTinyButton(this.width / 2 + 212, this.height - 53,
                     //#if MC > 11502
-                    new TextComponent(ModInfo.translate("gui.button.direct_delete")),
+                    ComponentCompatApi.translatable(ModInfo.MOD_ID + ".gui.button.direct_delete"),
                     //#else
                     //$$ ModInfo.translate("gui.button.direct_delete"),
                     //#endif
@@ -67,7 +67,7 @@ public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownC
         if (Configs.minimapHighlightWaypoint) {
             this.highlightButton = new MyTinyButton(this.width / 2 - 286, this.height - 53,
                     //#if MC > 11502
-                    new TextComponent(ModInfo.translate("gui.button.highlight_waypoint")),
+                    ComponentCompatApi.translatable(ModInfo.MOD_ID + ".gui.button.highlight_waypoint"),
                     //#else
                     //$$ ModInfo.translate("gui.button.highlight_waypoint"),
                     //#endif
