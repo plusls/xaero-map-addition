@@ -6,7 +6,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
-import top.hendrixshen.magiclib.compat.minecraft.network.chat.ComponentCompatApi;
 import xaero.common.AXaeroMinimap;
 import xaero.common.minimap.waypoints.Waypoint;
 import xaero.common.minimap.waypoints.WaypointWorld;
@@ -41,7 +40,7 @@ public class ButtonUtil {
                 var5.printStackTrace();
             }
             Minecraft.getInstance().setScreen(guiWaypoints);
-        }, ComponentCompatApi.translatable(ModInfo.MOD_ID + ".gui.title.direct_delete"), ComponentCompatApi.translatable(ModInfo.MOD_ID + ".gui.message.direct_delete")));
+        }, ModInfo.translatable("gui.title.direct_delete"), ModInfo.translatable("gui.message.direct_delete")));
     }
 
     public static Button.OnPress getHighlightButtonOnPress(Supplier<ArrayList<Waypoint>> getSelectedWaypointsList) {

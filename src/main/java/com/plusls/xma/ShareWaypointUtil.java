@@ -101,7 +101,7 @@ public class ShareWaypointUtil {
             Component addWaypointText = ComponentCompatApi.literal("[+X]")
                     .withStyle((StyleCompatApi.empty()
                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, addCommand))
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentCompatApi.translatable(ModInfo.MOD_ID + ".gui.message.xaero_add_waypoint")))
+                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, ModInfo.translatable("gui.message.xaero_add_waypoint")))
                             .withColor(ChatFormatting.GOLD)));
 
 

@@ -5,6 +5,13 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import top.hendrixshen.magiclib.compat.minecraft.network.chat.ComponentCompatApi;
+
+//#if MC > 11502
+import net.minecraft.network.chat.MutableComponent;
+//#else
+//$$ import net.minecraft.network.chat.BaseComponent;
+//#endif
 
 public class ModInfo {
     public static String MOD_ID = "xaero_map_addition";
@@ -29,6 +36,16 @@ public class ModInfo {
 
     public static String translate(String key, Object... objects) {
         return I18n.get(ModInfo.MOD_ID + "." + key, objects);
+    }
+
+    public static
+    //#if MC > 11502
+    MutableComponent
+    //#else
+    //$$ BaseComponent
+    //#endif
+    translatable(String key, Object... objects) {
+        return ComponentCompatApi.translatable(MOD_ID + "." + key, objects);
     }
 
     public static ResourceLocation id(String path) {
