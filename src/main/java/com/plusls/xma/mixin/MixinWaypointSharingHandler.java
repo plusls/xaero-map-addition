@@ -47,6 +47,9 @@ public abstract class MixinWaypointSharingHandler {
                 args[9] = this.restoreFormatting(args[9]);
             }
         }
+        //#if MC > 11802
+        text = "<" + playerName + "> " + text;
+        //#endif
         Component sendText = ShareWaypointUtil.getBetterShareText(text, args);
         if (sendText != null) {
             //#if MC > 11802

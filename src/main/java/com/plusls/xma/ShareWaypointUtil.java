@@ -82,7 +82,13 @@ public class ShareWaypointUtil {
             }
 
             if (dimId == 0) {
-                dimensionText = ComponentCompatApi.translatable("createWorld.customize.preset.overworld").withStyle(ChatFormatting.DARK_GREEN);
+                dimensionText = ComponentCompatApi.translatable(
+                        //#if MC > 11802
+                        "flat_world_preset.minecraft.overworld"
+                        //#else
+                        //$$ "createWorld.customize.preset.overworld"
+                        //#endif
+                ).withStyle(ChatFormatting.DARK_GREEN);
             } else if (dimId == 1) {
                 dimensionText = ComponentCompatApi.translatable("advancements.end.root.title").withStyle(ChatFormatting.DARK_PURPLE);
             } else if (dimId == -1) {
