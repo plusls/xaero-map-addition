@@ -21,8 +21,8 @@ import top.hendrixshen.magiclib.dependency.annotation.Dependency;
 import xaero.map.WorldMap;
 import xaero.map.gui.GuiMap;
 import xaero.map.gui.IRightClickableElement;
-import xaero.map.gui.RightClickOption;
 import xaero.map.gui.ScreenBase;
+import xaero.map.gui.dropdown.rightclick.RightClickOption;
 
 import java.util.ArrayList;
 

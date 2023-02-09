@@ -17,17 +17,11 @@ import xaero.common.minimap.waypoints.Waypoint;
 @Mixin(targets = "xaero.common.gui.GuiWaypoints$List", remap = false)
 public class MixinGuiWaypoints_List {
     @Inject(method = "drawWaypointSlot", at = @At(value = "RETURN"))
-    private void drawHighlightWaypoint(
-            //#if MC > 11502
-            PoseStack matrixStack,
-            //#endif
-            Waypoint w, int x, int y, CallbackInfo ci) {
+    private void drawHighlightWaypoint(Waypoint w, int x, int y, CallbackInfo ci) {
         if (!Configs.minimapHighlightWaypoint || w == null) {
             return;
         }
-        //#if MC <= 11502
-        //$$ PoseStack matrixStack = new PoseStack();
-        //#endif
+        PoseStack matrixStack = new PoseStack();
 
         BlockPos pos = new BlockPos(w.getX(), w.getY(), w.getZ());
         if (pos.equals(HighlightWaypointUtil.highlightPos)) {

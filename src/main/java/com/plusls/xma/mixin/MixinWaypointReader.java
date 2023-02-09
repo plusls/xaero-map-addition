@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.hendrixshen.magiclib.dependency.annotation.Dependencies;
 import top.hendrixshen.magiclib.dependency.annotation.Dependency;
 import xaero.map.gui.IRightClickableElement;
-import xaero.map.gui.RightClickOption;
+import xaero.map.gui.dropdown.rightclick.RightClickOption;
 import xaero.map.mods.gui.Waypoint;
 import xaero.map.mods.gui.WaypointReader;
 import java.util.ArrayList;

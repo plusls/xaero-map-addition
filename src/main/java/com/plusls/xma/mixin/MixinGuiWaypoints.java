@@ -15,9 +15,9 @@ import top.hendrixshen.magiclib.dependency.annotation.Dependencies;
 import top.hendrixshen.magiclib.dependency.annotation.Dependency;
 import xaero.common.AXaeroMinimap;
 import xaero.common.gui.GuiWaypoints;
-import xaero.common.gui.IDropDownCallback;
 import xaero.common.gui.MyTinyButton;
 import xaero.common.gui.ScreenBase;
+import xaero.common.gui.dropdown.IDropDownWidgetCallback;
 import xaero.common.minimap.waypoints.Waypoint;
 import xaero.common.minimap.waypoints.WaypointWorld;
 
@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 @Dependencies(or = {@Dependency("xaerominimap"), @Dependency("xaerobetterpvp")})
 @Mixin(value = GuiWaypoints.class, remap = false)
-public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownCallback {
+public abstract class MixinGuiWaypoints extends ScreenBase implements IDropDownWidgetCallback {
 
     private Button directDeleteButton;
     private Button highlightButton;
