@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import top.hendrixshen.magiclib.dependency.annotation.Dependencies;
-import top.hendrixshen.magiclib.dependency.annotation.Dependency;
+import top.hendrixshen.magiclib.dependency.api.annotation.Dependencies;
+import top.hendrixshen.magiclib.dependency.api.annotation.Dependency;
 import xaero.map.WorldMap;
 import xaero.map.gui.GuiMap;
 import xaero.map.gui.IRightClickableElement;
@@ -66,7 +66,7 @@ public abstract class MixinGuiMap extends ScreenBase implements IRightClickableE
             playerY = 32767;
         }
         ArrayList<RightClickOption> options = cir.getReturnValue();
-        options.add(new RightClickOption(ModInfo.MOD_ID + ".gui.xaero_right_click_map_highlight_location",
+        options.add(new RightClickOption(ModInfo.getModIdentifier() + ".gui.xaero_right_click_map_highlight_location",
                 options.size(), this) {
             public void onAction(Screen screen) {
                 HighlightWaypointUtil.highlightPos = new BlockPos(MixinGuiMap.this.rightClickX,

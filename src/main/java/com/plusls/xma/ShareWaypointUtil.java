@@ -6,8 +6,8 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import org.jetbrains.annotations.Nullable;
-import top.hendrixshen.magiclib.compat.minecraft.network.chat.ComponentCompatApi;
-import top.hendrixshen.magiclib.compat.minecraft.network.chat.StyleCompatApi;
+import top.hendrixshen.magiclib.compat.minecraft.api.network.chat.ComponentCompatApi;
+import top.hendrixshen.magiclib.compat.minecraft.api.network.chat.StyleCompatApi;
 import xaero.common.minimap.waypoints.Waypoint;
 
 //#if MC > 11502
@@ -41,7 +41,7 @@ public class ShareWaypointUtil {
                             dimensionText = ComponentCompatApi.translatable("gui.xaero_waypoint_unknown_dimension");
                         } else {
                             String dimIdPart = dimensionName.substring(4);
-                            ModInfo.LOGGER.warn("dimIdPart: {}", dimIdPart);
+                            ModInfo.getLogger().warn("dimIdPart: {}", dimIdPart);
                             switch (dimIdPart) {
                                 case "0":
                                     dimId = 0;
@@ -126,7 +126,7 @@ public class ShareWaypointUtil {
                 //$$ BaseComponent
                 //#endif
                         posText = ComponentCompatApi.literal(String.format("[%d, %d, %d]", Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5])));
-                ModInfo.LOGGER.warn("dimId: {}", dimId);
+                ModInfo.getLogger().warn("dimId: {}", dimId);
                 if (dimId == 0) {
                     posText.withStyle(ChatFormatting.GREEN);
                     posText.append(" -> ").append(addWaypointText).append(" ")

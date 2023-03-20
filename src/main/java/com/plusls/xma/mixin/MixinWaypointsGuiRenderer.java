@@ -1,8 +1,8 @@
 package com.plusls.xma.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
-import top.hendrixshen.magiclib.dependency.annotation.Dependencies;
-import top.hendrixshen.magiclib.dependency.annotation.Dependency;
+import top.hendrixshen.magiclib.dependency.api.annotation.Dependencies;
+import top.hendrixshen.magiclib.dependency.api.annotation.Dependency;
 import xaero.common.minimap.waypoints.render.WaypointsGuiRenderer;
 
 //#if MC <= 11502
