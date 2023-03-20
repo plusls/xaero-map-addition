@@ -32,6 +32,7 @@
     "${mod_id}.mixins.json"
   ],
   "depends": {
+    "malilib": "*",
     "minecraft": "${minecraft_dependency}",
     "magiclib-${minecraft_version_id}": ">=${magiclib_dependency}"
   },

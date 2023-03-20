@@ -26,6 +26,7 @@
     ]
   },
   "depends": {
+    "malilib": "*",
     "magiclib": ">=${magiclib_dependency}"
   },
   "custom": {
