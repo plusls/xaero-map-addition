@@ -1,0 +1,2 @@
+xaero.common.gui.IDropDownCallback xaero.common.gui.dropdown.IDropDownWidgetCallback
+xaero.map.gui.RightClickOption xaero.map.gui.dropdown.rightclick.RightClickOption

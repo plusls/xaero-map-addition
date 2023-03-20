@@ -1,11 +1,14 @@
 package com.plusls.xma;
 
+import lombok.Getter;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import top.hendrixshen.magiclib.compat.minecraft.network.chat.ComponentCompatApi;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import top.hendrixshen.magiclib.compat.minecraft.api.network.chat.ComponentCompatApi;
 
 //#if MC > 11502
 import net.minecraft.network.chat.MutableComponent;
@@ -14,41 +17,36 @@ import net.minecraft.network.chat.MutableComponent;
 //#endif
 
 public class ModInfo {
-    public static String MOD_ID = "xaero_map_addition";
-    //#if MC > 11802
-    public static final String CURRENT_MOD_ID = MOD_ID + "-1_19";
-    //#elseif MC > 11701
-    //$$ public static final String CURRENT_MOD_ID = MOD_ID + "-1_18_2";
-    //#elseif MC > 11605
-    //$$ public static final String CURRENT_MOD_ID = MOD_ID + "-1_17_1";
-    //#elseif MC > 11502
-    //$$ public static final String CURRENT_MOD_ID = MOD_ID + "-1_16_5";
-    //#elseif MC > 11404
-    //$$ public static final String CURRENT_MOD_ID = MOD_ID + "-1_15_2";
-    //#else
-    //$$ public static final String CURRENT_MOD_ID = MOD_ID + "-1_14_4";
-    //#endif
-    public static final String MOD_NAME = FabricLoader.getInstance().getModContainer(CURRENT_MOD_ID)
-            .orElseThrow(RuntimeException::new).getMetadata().getName();
-    public static final String MOD_VERSION = FabricLoader.getInstance().getModContainer(CURRENT_MOD_ID)
-            .orElseThrow(RuntimeException::new).getMetadata().getVersion().getFriendlyString();
-    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+    @Getter
+    private static final String currentModIdentifier = "@MOD_IDENTIFIER@-@MINECRAFT_VERSION_IDENTIFY@";
+    @Getter
+    private static final String modIdentifier = "@MOD_IDENTIFIER@";
+    @Getter
+    private static final String currentModName = FabricLoader.getInstance().getModContainer(currentModIdentifier).orElseThrow(RuntimeException::new).getMetadata().getName();
+    @Getter
+    private static final String modName = "@MOD_NAME@";
+    @Getter
+    private static final String modVersion = FabricLoader.getInstance().getModContainer(currentModIdentifier).orElseThrow(RuntimeException::new).getMetadata().getVersion().getFriendlyString();
+    @Getter
+    private static final Logger logger = LogManager.getLogger(modIdentifier);
 
-    public static String translate(String key, Object... objects) {
-        return I18n.get(ModInfo.MOD_ID + "." + key, objects);
+    public static @NotNull String translate(String key, Object... objects) {
+        return I18n.get(ModInfo.modIdentifier + "." + key, objects);
     }
 
-    public static
+    @Contract("_, _ -> new")
+    public static @NotNull
     //#if MC > 11502
     MutableComponent
     //#else
     //$$ BaseComponent
     //#endif
     translatable(String key, Object... objects) {
-        return ComponentCompatApi.translatable(MOD_ID + "." + key, objects);
+        return ComponentCompatApi.translatable(modIdentifier + "." + key, objects);
     }
 
-    public static ResourceLocation id(String path) {
-        return new ResourceLocation(MOD_ID, path);
+    @Contract("_ -> new")
+    public static @NotNull ResourceLocation id(String path) {
+        return new ResourceLocation(modIdentifier, path);
     }
 }

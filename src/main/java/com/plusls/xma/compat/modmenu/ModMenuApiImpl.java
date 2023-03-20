@@ -16,7 +16,7 @@ public class ModMenuApiImpl implements ModMenuCompatApi {
 
     @Override
     public String getModIdCompat() {
-        return ModInfo.CURRENT_MOD_ID;
+        return ModInfo.getCurrentModIdentifier();
     }
 
 }
